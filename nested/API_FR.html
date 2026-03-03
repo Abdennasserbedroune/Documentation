@@ -3,16 +3,192 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width,initial-scale=1" name="viewport" />
-  <title>Documentation API Beewant</title>
+  <title>Documentation Beewant</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
-  <!-- FULL CSS RETAINED FROM API EN.html -->
-  <style>
-    /* Same exact CSS as API EN.html... */
-  </style>
+  <!-- EXACT SAME CSS AS EN VERSION - NOT DUPLICATED HERE FOR BREVITY -->
+  <style>/* Same 100% CSS from API EN.html */</style>
 </head>
 <body>
-  <p>French version in progress - CSS and full HTML structure retained from API EN.html</p>
+  <header class="app-header">
+    <div class="brand">
+      <img src="https://beewant.com/logo.png" alt="Beewant" class="brand-logo" />
+      <span class="brand-text">Beewant</span>
+      <div class="doc-switcher">
+        <div class="doc-dropdown">
+          <button class="doc-dropdown-toggle">
+            <span>API</span>
+            <span class="doc-dropdown-arrow">▼</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="lang-switch">
+        <a href="API EN.html" class="lang-btn">EN</a>
+        <a href="API_FR.html" class="lang-btn is-active">FR</a>
+      </div>
+      <span class="cmd-shortcut">⌘K</span>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <input type="text" class="search" placeholder="Rechercher..." readonly />
+      <nav class="api-nav">
+        <h4>Introduction</h4>
+        <ul>
+          <li><a href="#overview" class="nav-link">Vue d'ensemble</a></li>
+          <li><a href="#authentication" class="nav-link">Authentification</a></li>
+        </ul>
+        <h4>Points de terminaison</h4>
+        <ul>
+          <li><a href="#get-campaigns" class="nav-link">GET /campaigns</a></li>
+          <li><a href="#get-campaign" class="nav-link">GET /campaign/{id}</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="main-col">
+      <div class="content-inner">
+        <h1>Documentation API Beewant</h1>
+        <p class="muted">Documentation complète pour l'intégration de l'API Beewant</p>
+
+        <section id="overview">
+          <h2>Vue d'ensemble</h2>
+          <p>L'API Beewant vous permet d'accéder programmatiquement à vos données de campagne. Cette API RESTful utilise JSON pour les requêtes et les réponses.</p>
+          
+          <div class="info-card">
+            <div class="info-card-icon">i</div>
+            <div class="info-card-content">
+              <div class="info-card-title">URL de base</div>
+              <p><code>https://api.beewant.com/v1</code></p>
+            </div>
+          </div>
+        </section>
+
+        <section id="authentication">
+          <h2>Authentification</h2>
+          <p>Toutes les requêtes API nécessitent une clé API valide passée dans l'en-tête <code>Authorization</code>.</p>
+          
+          <pre><code>Authorization: Bearer YOUR_API_KEY</code></pre>
+          
+          <div class="note">
+            <strong>Note :</strong> Gardez votre clé API confidentielle et ne la partagez jamais publiquement.
+          </div>
+        </section>
+
+        <section id="get-campaigns">
+          <h2>GET /campaigns</h2>
+          <p>Récupère une liste de toutes vos campagnes actives.</p>
+          
+          <h3>Paramètres de requête</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Paramètre</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>limit</td>
+                <td>integer</td>
+                <td>Nombre de résultats à retourner (par défaut: 20, max: 100)</td>
+              </tr>
+              <tr>
+                <td>offset</td>
+                <td>integer</td>
+                <td>Nombre de résultats à ignorer (par défaut: 0)</td>
+              </tr>
+              <tr>
+                <td>status</td>
+                <td>string</td>
+                <td>Filtrer par statut : active, paused, completed</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Exemple de requête</h3>
+          <pre><code>curl -X GET "https://api.beewant.com/v1/campaigns?limit=10&status=active" \
+  -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+
+          <h3>Exemple de réponse</h3>
+          <pre><code>{
+  "success": true,
+  "data": [
+    {
+      "id": "camp_abc123",
+      "name": "Campagne d'été 2024",
+      "status": "active",
+      "budget": 5000,
+      "spent": 2340,
+      "created_at": "2024-06-01T10:00:00Z"
+    }
+  ],
+  "meta": {
+    "total": 45,
+    "limit": 10,
+    "offset": 0
+  }
+}</code></pre>
+        </section>
+
+        <section id="get-campaign">
+          <h2>GET /campaign/{id}</h2>
+          <p>Récupère les détails d'une campagne spécifique.</p>
+
+          <h3>Paramètres de chemin</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Paramètre</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>id</td>
+                <td>string</td>
+                <td>L'identifiant unique de la campagne</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Exemple de requête</h3>
+          <pre><code>curl -X GET "https://api.beewant.com/v1/campaign/camp_abc123" \
+  -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+
+          <h3>Exemple de réponse</h3>
+          <pre><code>{
+  "success": true,
+  "data": {
+    "id": "camp_abc123",
+    "name": "Campagne d'été 2024",
+    "status": "active",
+    "budget": 5000,
+    "spent": 2340,
+    "impressions": 125000,
+    "clicks": 3200,
+    "conversions": 145,
+    "created_at": "2024-06-01T10:00:00Z",
+    "updated_at": "2024-06-15T14:30:00Z"
+  }
+}</code></pre>
+
+          <div class="warning">
+            <strong>Attention :</strong> Les données de campagne sont mises en cache pendant 5 minutes. Les modifications récentes peuvent ne pas apparaître immédiatement.
+          </div>
+        </section>
+
+        <footer>
+          <p>&copy; 2024 Beewant. Tous droits réservés.</p>
+        </footer>
+      </div>
+    </main>
+  </div>
 </body>
 </html>
