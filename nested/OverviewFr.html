@@ -1,0 +1,5053 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+ <meta charset="utf-8" />
+ <meta content="width=device-width, initial-scale=1" name="viewport" />
+ <title>Beewant Documentation</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+ <style>
+    /* ===============================
+       Variables & Reset
+       =============================== */
+    :root {
+      /* Dark theme (default) */
+      --bg: #0c0d0e;
+      --sidebar-bg: #141515;
+      --content-bg: #212121;
+      --text: #e8e9ea;
+      --text-muted: #9a9ca5;
+      --border: #2a2b30;
+      --accent: #20808d;
+      --accent-hover: #2a9aa9;
+      --card-bg: #1e1f23;
+      --card-border: #2a2b30;
+
+      --header-h: 60px;
+      --sidebar-w: 260px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 15px;
+    }
+
+
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0
+    }
+
+    body {
+      background: var(--content-bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.65;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ===============================
+       Header
+       =============================== */
+    header.app-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: var(--sidebar-bg);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      transition: background 0.3s ease;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .brand-logo {
+      height: 40px;
+      width: auto;
+      display: block;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lang-switch {
+      display: inline-flex;
+      padding: 3px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(10px);
+    }
+
+    .lang-btn {
+      min-width: 34px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .lang-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .lang-btn.is-active {
+      background: #ffffff;
+      color: #111827;
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.4);
+    }
+
+    /* Brand text styling */
+    .brand-text {
+      font-family: 'Righteous', sans-serif;
+      font-size: 24px;
+      color: white;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* Documentation switcher */
+    .doc-switcher {
+      display: flex;
+      align-items: center;
+      margin-left: 15px;
+    }
+
+    .doc-dropdown {
+      position: relative;
+    }
+
+    .doc-dropdown-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.8);
+      font-family: 'Righteous', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .doc-dropdown-toggle:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .doc-dropdown-arrow {
+      font-size: 9px;
+      opacity: 0.6;
+      transition: transform 0.2s ease;
+    }
+
+    .doc-dropdown.is-open .doc-dropdown-arrow {
+      transform: rotate(180deg);
+    }
+
+    .doc-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      background: #141515;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      min-width: 190px;
+      padding: 6px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1001;
+    }
+
+    .doc-dropdown.is-open .doc-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .doc-dropdown-item {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 10px 12px;
+      color: rgba(255, 255, 255, 0.7);
+      font-family: 'Righteous', sans-serif;
+      font-size: 13px;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+      border: none;
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .doc-dropdown-item:hover {
+      background: rgba(32, 128, 141, 0.15);
+      color: #fff;
+    }
+
+    .doc-dropdown-item.active {
+      color: #20808d;
+      background: rgba(32, 128, 141, 0.08);
+    }
+
+    /* ===============================
+       Layout: sidebar + main
+       =============================== */
+    .app-container {
+      display: flex;
+      padding-top: var(--header-h);
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    aside.sidebar {
+      position: fixed;
+      left: 0;
+      top: var(--header-h);
+      width: var(--sidebar-w);
+      height: calc(100vh - var(--header-h));
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      padding: 20px 16px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      transition: background 0.3s ease;
+    }
+
+    /* Custom scrollbar */
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Search */
+    .search {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .search::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .search:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .search[readonly] {
+      cursor: pointer;
+    }
+
+    /* Command palette */
+    .command-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 14, 18, 0.45);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 70px 16px 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 2000;
+    }
+
+    .command-overlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .command-panel {
+      width: min(640px, 100%);
+      background: #1b1c20;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+      transform: translateY(16px);
+      transition: transform 0.25s ease;
+    }
+
+    .command-overlay.is-open .command-panel {
+      transform: translateY(0);
+    }
+
+    .command-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 20px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .command-input-wrap svg {
+      width: 18px;
+      height: 18px;
+      opacity: 0.6;
+    }
+
+    #commandInput {
+      flex: 1;
+      background: transparent;
+      border: none;
+      font-size: 16px;
+      color: #fff;
+    }
+
+    #commandInput::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    #commandInput:focus {
+      outline: none;
+    }
+
+    .command-meta {
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+      padding: 10px 20px 6px;
+    }
+
+    .command-results {
+      max-height: 60vh;
+      overflow-y: auto;
+      padding-bottom: 8px;
+      scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+      scrollbar-width: thin;
+    }
+
+    .command-results::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .command-results::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .command-results::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+    }
+
+    .command-result {
+      width: 100%;
+      background: transparent;
+      border: none;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 20px;
+      color: #d7d8da;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .command-result+.command-result {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .command-result:hover,
+    .command-result.active {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    .command-result-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .command-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .command-snippet {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.4;
+    }
+
+    .command-section {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      white-space: nowrap;
+    }
+
+    .command-empty {
+      padding: 24px 20px 30px;
+      text-align: center;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Nav */
+    nav.api-nav {
+      margin-top: 8px;
+    }
+
+    nav.api-nav h4 {
+      margin: 10px 0 2px 0;
+    }
+
+    nav.api-nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 6px 0;
+    }
+
+    nav.api-nav li {
+      margin: 2px 0;
+    }
+
+    .nav-link {
+      display: block;
+      padding: 6px 10px;
+      border-radius: 6px;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 500;
+      font-size: 13.5px;
+      transition: all 0.15s;
+    }
+
+    .nav-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-link.active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .sub-item {
+      padding-left: 20px;
+      font-size: 13px;
+    }
+
+    /* ── Sidebar section headers (h4 links) ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      color: rgba(255, 255, 255, 0.75);
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: none;
+      letter-spacing: 0;
+      transition: all 0.15s;
+    }
+
+    .section-header:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .section-header .sb-ic {
+      width: 18px;
+      height: 18px;
+      opacity: 0.9;
+      flex-shrink: 0;
+    }
+
+    /* ── nav-link items with inline SVG icon (e.g. FAQ) ── */
+    .nav-link.has-icon {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-link.has-icon .sb-ic {
+      width: 16px;
+      height: 16px;
+      opacity: 0.85;
+      flex-shrink: 0;
+    }
+
+    /* ===============================
+       Main content area
+       =============================== */
+    .main-col {
+      margin-left: var(--sidebar-w);
+      width: calc(100% - var(--sidebar-w));
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 40px 24px;
+      background: var(--content-bg);
+    }
+
+    .content-inner {
+      width: 88%;
+      max-width: 700px;
+      color: var(--text);
+    }
+
+    /* Typography */
+    h1 {
+      margin: 0 0 12px 0;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    h2 {
+      margin-top: 48px;
+      margin-bottom: 16px;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      margin-top: 32px;
+      margin-bottom: 12px;
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    h4 {
+      margin-top: 24px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    p {
+      margin: 0 0 16px 0;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .muted {
+      color: var(--text-muted);
+    }
+
+    ol,
+    ul {
+      margin: 12px 0 16px 24px;
+      color: var(--text);
+    }
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+
+    li strong,
+    p strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* Info/Tip Cards */
+    .info-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .info-card-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .info-card-content {
+      flex: 1;
+    }
+
+    .info-card-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .info-card p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    /* Note cards */
+    .note-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .note-card strong {
+      color: var(--text);
+    }
+
+    /* Table styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: var(--content-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    thead {
+      background: var(--card-bg);
+    }
+
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text);
+      border-bottom: 2px solid var(--border);
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: var(--card-bg);
+    }
+
+    /* Scroll margin for anchors */
+    section[id],
+    article[id] {
+      scroll-margin-top: calc(var(--header-h) + 20px);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 13px;
+      background: var(--content-bg);
+    }
+
+    /* Responsive */
+    @media (max-width:980px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+        z-index: 999;
+      }
+
+      .main-col {
+        margin-left: 0;
+        width: 100%;
+        padding: 24px 16px;
+      }
+
+      .mobile-menu-btn {
+        display: block !important;
+      }
+
+      /* Hide right TOC on smaller screens */
+      .right-toc {
+        display: none;
+      }
+
+      /* Make content full width */
+      .content-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .content-inner {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+
+    /* Tablet and smaller responsive fixes */
+    @media (max-width: 768px) {
+      :root {
+        font-size: 14px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      h3 {
+        font-size: 18px;
+      }
+
+      /* Better spacing on mobile */
+      .main-col {
+        padding: 20px 12px;
+      }
+
+      /* Make tables responsive */
+      table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        font-size: 13px;
+      }
+
+      th,
+      td {
+        padding: 8px 10px;
+        white-space: nowrap;
+      }
+
+      /* Video containers */
+      .video-switcher-container {
+        margin: 16px 0;
+      }
+
+      .video-content iframe {
+        height: 250px !important;
+      }
+
+      /* Tutorial modal adjustments */
+      .tutorial-modal {
+        padding: 10px;
+      }
+
+      .tutorial-dialog {
+        width: 100%;
+        max-height: 95vh;
+      }
+
+      .tutorial-gallery {
+        min-height: 80vh;
+      }
+
+      /* Code blocks */
+      pre {
+        padding: 10px;
+        font-size: 12px;
+        overflow-x: auto;
+      }
+
+      pre code {
+        font-size: 12px;
+      }
+
+      /* Info cards */
+      .info-card {
+        padding: 12px 14px;
+        font-size: 14px;
+      }
+
+      /* Section navigation */
+      .section-nav {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .sec-nav-btn {
+        max-width: 100%;
+      }
+    }
+
+    /* Mobile specific fixes */
+    @media (max-width: 480px) {
+      :root {
+        --header-h: 56px;
+      }
+
+      header.app-header {
+        padding: 0 12px;
+      }
+
+      .brand {
+        font-size: 14px;
+      }
+
+      .brand-logo {
+        height: 32px;
+      }
+
+      h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+
+      h2 {
+        font-size: 20px;
+        margin-top: 32px;
+        margin-bottom: 12px;
+      }
+
+      h3 {
+        font-size: 17px;
+        margin-top: 24px;
+      }
+
+      h4 {
+        font-size: 15px;
+      }
+
+      p,
+      li {
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .main-col {
+        padding: 16px 10px;
+      }
+
+      /* Video tabs */
+      .video-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .video-tab {
+        font-size: 12px;
+        padding: 6px 12px;
+        white-space: nowrap;
+      }
+
+      .video-content iframe {
+        height: 200px !important;
+      }
+
+      /* Tutorial buttons */
+      .tutorial-btn {
+        font-size: 12px;
+        padding: 8px 10px;
+      }
+
+      /* Copy button */
+      .copy-btn {
+        top: 6px;
+        right: 6px;
+        padding: 4px 8px;
+        font-size: 11px;
+      }
+
+      /* Thumbnails */
+      .thumbs {
+        max-width: 100%;
+      }
+
+      .thumb {
+        width: 60px;
+        height: 40px;
+      }
+
+      /* Navigation arrows */
+      .nav-arrow {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+
+      .nav-prev {
+        left: 6px;
+      }
+
+      .nav-next {
+        right: 6px;
+      }
+
+      /* Callouts */
+      .tip,
+      .note,
+      .warning {
+        padding: 10px 12px;
+        font-size: 13px;
+      }
+
+      /* Lists */
+      ol,
+      ul {
+        margin-left: 18px;
+      }
+
+      /* Better h3 dot positioning on mobile */
+      .main-col h3:before {
+        left: -10px;
+        width: 5px;
+        height: 5px;
+      }
+    }
+
+    /* Ensure no horizontal scroll */
+    body {
+      overflow-x: hidden;
+    }
+
+    * {
+      max-width: 100%;
+    }
+
+    img,
+    video,
+    iframe {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Fix for video iframes */
+    .video-panel iframe {
+      width: 100%;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      padding: 8px;
+      font-size: 20px;
+    }
+
+    /* Added: ensure heading anchors aren't hidden under fixed header */
+    main [id] {
+      scroll-margin-top: calc(var(--header-h) + 20px);
+    }
+
+
+    /* === Callouts, Code, UseCase (Overrides v2) === */
+    :root {
+      --tip-bg: rgba(32, 128, 141, 0.18);
+      --tip-border: rgba(32, 128, 141, 0.60);
+
+      --note-bg: rgba(148, 163, 184, 0.14);
+      --note-border: rgba(148, 163, 184, 0.40);
+
+      --warning-bg: rgba(245, 158, 11, 0.16);
+      --warning-border: rgba(245, 158, 11, 0.65);
+
+      --code-inline-bg: rgba(255, 255, 255, 0.07);
+      --code-block-bg: rgba(0, 0, 0, 0.28);
+      --code-border: rgba(255, 255, 255, 0.12);
+    }
+
+
+
+    /* Callout blocks */
+    .tip,
+    .note,
+    .warning {
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin: 14px 0;
+      border: 1px solid var(--border);
+      border-left-width: 4px;
+      color: var(--text);
+      background: var(--content-bg);
+    }
+
+    .tip {
+      background: var(--tip-bg);
+      border-color: var(--tip-border);
+    }
+
+    .note {
+      background: var(--note-bg);
+      border-color: var(--note-border);
+    }
+
+    .warning {
+      background: var(--warning-bg);
+      border-color: var(--warning-border);
+    }
+
+    .tip u,
+    .note u,
+    .warning u {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .tip strong {
+      color: var(--accent-hover);
+    }
+
+    .note strong {
+      color: var(--text);
+    }
+
+    .warning strong {
+      color: #f59e0b;
+    }
+
+    /* Code */
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      background: var(--code-inline-bg);
+      border: 1px solid var(--code-border);
+      color: var(--text);
+      padding: 2px 6px;
+      border-radius: 8px;
+      font-size: 0.95em;
+    }
+
+    pre {
+      background: var(--code-block-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 14px;
+      padding: 14px;
+      overflow: auto;
+      margin: 14px 0;
+    }
+
+    pre code {
+      background: transparent;
+      border: 0;
+      padding: 0;
+      border-radius: 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* Use Case attention */
+    .usecase-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      margin: 18px 0 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: linear-gradient(90deg, rgba(32, 128, 141, 0.24), rgba(32, 128, 141, 0.08));
+    }
+
+    .usecase-title::before {
+      content: "Real-world";
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(32, 128, 141, 0.22);
+      border: 1px solid rgba(32, 128, 141, 0.45);
+      color: var(--text);
+      flex: 0 0 auto;
+    }
+
+
+
+    /* === Tutorial Gallery Modal v3 === */
+    .section-actions {
+      display: flex;
+      justify-content: flex-start;
+      margin: 10px 0 18px;
+    }
+
+    .tutorial-btn {
+      appearance: none;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: linear-gradient(180deg, rgba(32, 128, 141, 0.24), rgba(32, 128, 141, 0.12));
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: 0.2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      user-select: none;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+
+    .tutorial-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(32, 128, 141, 0.60);
+      background: linear-gradient(180deg, rgba(32, 128, 141, 0.34), rgba(32, 128, 141, 0.14));
+    }
+
+    .tutorial-btn:active {
+      transform: translateY(0px);
+    }
+
+    .tutorial-btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(32, 128, 141, 0.25);
+    }
+
+    .tutorial-btn .pill {
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(32, 128, 141, 0.55);
+      background: rgba(32, 128, 141, 0.20);
+      color: var(--text);
+      flex: 0 0 auto;
+    }
+
+
+
+    .tutorial-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 3000;
+      background: rgba(0, 0, 0, 0.62);
+      backdrop-filter: blur(8px);
+    }
+
+    .tutorial-modal.is-open {
+      display: flex;
+    }
+
+    .tutorial-dialog {
+      width: min(1080px, 100%);
+      max-height: min(90vh, 980px);
+      overflow: hidden;
+      background: var(--content-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+    }
+
+    .tutorial-gallery {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: min(84vh, 860px);
+    }
+
+    .tutorial-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(32, 128, 141, 0.13), transparent);
+    }
+
+
+    .tutorial-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .tutorial-meta .title {
+      font-weight: 900;
+      font-size: 14px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tutorial-meta .sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .tutorial-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .tbtn {
+      appearance: none;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 12px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+
+    .tbtn:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.10);
+      border-color: rgba(32, 128, 141, 0.55);
+    }
+
+    .tbtn:active {
+      transform: translateY(0px);
+    }
+
+
+    .tutorial-stage {
+      position: relative;
+      background: rgba(0, 0, 0, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+
+    .tutorial-imgwrap {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .tutorial-img {
+      max-width: 100%;
+      max-height: 72vh;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.10);
+      transform-origin: center center;
+      will-change: transform;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 4;
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(0, 0, 0, 0.32);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 900;
+      pointer-events: auto;
+    }
+
+    .nav-arrow:hover {
+      background: rgba(0, 0, 0, 0.40);
+      border-color: rgba(32, 128, 141, 0.70);
+    }
+
+    .nav-arrow:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .nav-prev {
+      left: 12px;
+    }
+
+    .nav-next {
+      right: 12px;
+    }
+
+    .tutorial-bottombar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-top: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+
+    .thumbs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      max-width: 72%;
+    }
+
+    .thumbs::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .thumbs::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+    }
+
+
+    .thumb {
+      width: 76px;
+      height: 48px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      flex: 0 0 auto;
+      cursor: pointer;
+      opacity: 0.82;
+      transition: opacity .12s ease, transform .12s ease, border-color .12s ease;
+      background: rgba(0, 0, 0, 0.10);
+    }
+
+    .thumb:hover {
+      opacity: 1;
+      transform: translateY(-1px);
+      border-color: rgba(32, 128, 141, 0.55);
+    }
+
+    .thumb[aria-current="true"] {
+      opacity: 1;
+      border-color: rgba(32, 128, 141, 0.72);
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .zoom-level {
+      font-size: 12px;
+      color: var(--text-muted);
+      min-width: 60px;
+      text-align: right;
+      font-weight: 800;
+    }
+
+
+    /* ====== Combined layout + readability color accents (v5) ====== */
+
+    /* Remove the weird top gap */
+    .main-col {
+      padding-top: 24px !important
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 940px) 200px;
+      gap: 18px;
+      justify-content: center;
+      align-items: start
+    }
+
+    .right-toc {
+      position: sticky;
+      top: calc(var(--header-h) + 18px);
+      height: fit-content;
+      justify-self: end
+    }
+
+    /* Sidebar header icons */
+    nav
+
+    .sb-h4 {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .sb-ic {
+      width: 18px;
+      height: 18px;
+      opacity: .95;
+      color: rgba(255, 255, 255, 0.85)
+    }
+
+
+    /* TOC identity: consistent full dot */
+    .toc-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 9px 9px
+    }
+
+    .toc-title {
+      font-size: 10.5px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 900;
+      margin-bottom: 7px
+    }
+
+    .toc-list {
+      list-style: none;
+      margin: 0;
+      padding: 0
+    }
+
+    .toc-list li {
+      margin: 3px 0
+    }
+
+    .toc-link {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      padding: 6px 7px;
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-weight: 650;
+      font-size: 12px;
+      transition: background .15s ease, color .15s ease
+    }
+
+    .toc-link:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text)
+    }
+
+    .toc-link.active {
+      background: rgba(255, 255, 255, 0.10);
+      color: var(--text)
+    }
+
+    .toc-bullet {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 2px rgba(32, 128, 141, 0.18);
+      flex: 0 0 auto
+    }
+
+    /* Show only one page at a time */
+    .doc-page {
+      display: none
+    }
+
+    .doc-page[data-active="true"] {
+      display: block
+    }
+
+    /* Smaller section nav buttons */
+    .section-nav {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      margin-top: 44px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border)
+    }
+
+    .sec-nav-btn {
+      flex: 1;
+      max-width: 290px;
+      text-align: left;
+      appearance: none;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease
+    }
+
+    .sec-nav-btn.next {
+      text-align: right
+    }
+
+    .sec-nav-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      border-color: rgba(32, 128, 141, 0.60);
+      background: linear-gradient(180deg, rgba(32, 128, 141, 0.18), rgba(32, 128, 141, 0.05))
+    }
+
+    .sec-nav-btn:disabled {
+      opacity: .35;
+      cursor: not-allowed
+    }
+
+    .sec-nav-kicker {
+      display: block;
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 900;
+      margin-bottom: 2px
+    }
+
+    .sec-nav-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 850;
+      color: var(--text)
+    }
+
+    /* Copy button */
+    pre {
+      position: relative
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(0, 0, 0, 0.22);
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing: .01em;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease
+    }
+
+    .copy-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(32, 128, 141, 0.55);
+      background: rgba(32, 128, 141, 0.18)
+    }
+
+    .copy-btn:active {
+      transform: translateY(0px)
+    }
+
+    .copy-btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(32, 128, 141, 0.22)
+    }
+
+    .copy-ic {
+      width: 16px;
+      height: 16px;
+      display: block
+    }
+
+    .copy-ic--ok {
+      display: none
+    }
+
+    .copy-btn.is-copied .copy-ic {
+      display: none
+    }
+
+    .copy-btn.is-copied .copy-ic--ok {
+      display: block
+    }
+
+    .copy-btn .copy-txt {
+      min-width: 46px;
+      text-align: left
+    }
+
+
+
+    /* ====== Readability + more life (color accents) ====== */
+    :root {
+      --text-soft: rgba(232, 233, 234, 0.92);
+      --text-dim: rgba(232, 233, 234, 0.74);
+      --link: #7dd3fc;
+      --link-hover: #22d3ee;
+      --chip-text: rgba(232, 233, 234, 0.96);
+    }
+
+
+    .main-col p,
+    .main-col li {
+      color: var(--text-soft)
+    }
+
+    .muted {
+      color: var(--text-dim) !important
+    }
+
+    .main-col a {
+      color: var(--link);
+      text-decoration: none
+    }
+
+    /* Better hierarchy: accent dot on h3 */
+    .main-col h3 {
+      position: relative
+    }
+
+    .main-col h3:before {
+      content: "";
+      position: absolute;
+      left: -14px;
+      top: 0.55em;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(32, 128, 141, 0.14)
+    }
+
+
+    /* Inline code: softer chip */
+    code {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.14)
+    }
+
+
+    /* Model/keyword pills: turns leading <strong> in list items into chips */
+    .main-col li>strong {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      margin-right: 6px;
+      border-radius: 999px;
+      background: var(--chip-bg);
+      border: 1px solid var(--chip-border);
+      color: var(--chip-text);
+      font-weight: 800;
+      letter-spacing: 0.01em
+    }
+
+    /* Slight emphasis for important lists after a paragraph */
+    .main-col p+ul {
+      border-left: 2px solid rgba(32, 128, 141, 0.35);
+      padding-left: 18px;
+      margin-left: 4px
+    }
+
+
+    @media (max-width: 1100px) {
+      .content-grid {
+        grid-template-columns: minmax(0, 940px)
+      }
+
+      .right-toc {
+        display: none
+      }
+    }
+
+
+    /* Video Switcher */
+    .video-switcher-container {
+      margin: 24px 0;
+    }
+
+    .video-tabs-wrapper {
+      margin-bottom: 16px;
+    }
+
+    .video-tabs {
+      position: relative;
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .tab-indicator {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), width 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      height: calc(100% - 6px);
+      top: 3px;
+      z-index: 0;
+    }
+
+    .video-tab {
+      position: relative;
+      z-index: 1;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      cursor: pointer;
+      transition: color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .video-tab:hover {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .video-tab.active {
+      color: #fff;
+    }
+
+    .video-content {
+      position: relative;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .video-panel {
+      width: 100%;
+    }
+
+    .video-panel iframe {
+      display: block;
+      border: none;
+      border-radius: 8px;
+      width: 100%;
+      height: 400px;
+    }
+
+    /* Highlight typography */
+    .highlight-detail {
+      font-size: 1.15em;
+      font-weight: 800;
+      color: var(--accent-hover);
+    }
+
+    .highlight-detail strong {
+      color: var(--accent-hover) !important;
+    }
+
+    /* Interactive Image Gallery v2 (2-Step Flow) */
+    .img-gallery-container {
+      position: relative;
+      margin: 32px 0;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 18px;
+      background: radial-gradient(circle at 10% 20%, rgba(32, 128, 141, 0.28), transparent 45%), #050608;
+      cursor: pointer;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .img-gallery-container:hover {
+      border-color: rgba(32, 128, 141, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .img-gallery-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      grid-auto-rows: 155px;
+      gap: 10px;
+      pointer-events: none;
+      filter: saturate(0.9);
+    }
+
+    .img-gallery-preview-grid img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      opacity: 0.9;
+      transition: transform 0.5s ease, filter 0.5s ease;
+    }
+
+    .img-gallery-container:hover .img-gallery-preview-grid img {
+      transform: scale(1.03);
+      filter: brightness(1.15);
+    }
+
+    .img-gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(140deg, rgba(5, 6, 8, 0.85), rgba(5, 6, 8, 0.2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .img-gallery-overlay::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 1px solid rgba(32, 128, 141, 0.35);
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+
+    .btn-explore {
+      pointer-events: auto;
+      background: linear-gradient(120deg, #f97316, #facc15);
+      color: #050505;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 15px 35px rgba(249, 115, 22, 0.3);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .btn-explore:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 18px 40px rgba(249, 115, 22, 0.45);
+    }
+
+    @keyframes pulseGlow {
+      0% {
+        transform: scale(0.9);
+        opacity: 0.4;
+      }
+
+      50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+      }
+
+      100% {
+        transform: scale(0.9);
+        opacity: 0.4;
+      }
+    }
+
+    /* Modal Base */
+    .beewant-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 5000;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(8px) scale(0.98);
+      transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s ease;
+    }
+
+    .beewant-modal.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      border-bottom: 1px solid #222;
+      background: rgba(0, 0, 0, 0.85);
+      animation: modalHeaderDrop 0.45s ease both;
+    }
+
+    .modal-close,
+    .modal-grid-back {
+      background: #1a1b1e;
+      color: #fff;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: background 0.2s;
+    }
+
+    .view-control-left {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .modal-close:hover,
+    .modal-grid-back:hover {
+      background: #2a2b30;
+    }
+
+    /* Explorer Grid Modal */
+    .explorer-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    .explorer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 14px;
+    }
+
+    .explorer-item {
+      position: relative;
+      aspect-ratio: 1;
+      cursor: pointer;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .explorer-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .explorer-item::after {
+      content: "View prompt";
+      position: absolute;
+      inset: 12px;
+      border-radius: 12px;
+      background: linear-gradient(145deg, rgba(5, 6, 8, 0.05), rgba(5, 6, 8, 0.6));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.85);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+    }
+
+    .explorer-item:hover {
+      transform: translateY(-6px);
+      border-color: rgba(32, 128, 141, 0.7);
+    }
+
+    .explorer-item:hover img {
+      transform: scale(1.08);
+    }
+
+    .explorer-item:hover::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Detail View Modal */
+    .detail-content {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .detail-img-side {
+      flex: 1.6;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .detail-img-side img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .detail-info-side {
+      flex: 1;
+      background: var(--content-bg);
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      overflow-y: auto;
+      animation: modalPaneRise 0.45s ease both;
+    }
+
+    .detail-label-group {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .detail-prompt-box {
+      color: #e2e8f0;
+      font-size: 15px;
+      line-height: 1.65;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 16px;
+      padding: 20px 22px;
+      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(32, 128, 141, 0.12);
+    }
+
+    .detail-prompt-box .prompt-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(32, 128, 141, 0.15);
+      color: var(--accent-hover);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .detail-prompt-box .prompt-label::before {
+      content: "★";
+      font-size: 10px;
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: auto;
+    }
+
+    .tools-subnav {
+      margin: 16px 0 32px;
+      padding: 14px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      background: rgba(8, 10, 15, 0.85);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .tools-subnav-label {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.65);
+      margin-right: 8px;
+    }
+
+    .tools-subnav a {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 14px;
+      text-decoration: none;
+      transition: border-color 0.25s ease, background 0.25s ease;
+    }
+
+    .tools-subnav a:hover {
+      border-color: var(--accent);
+      background: rgba(32, 128, 141, 0.12);
+    }
+
+    .btn-remix,
+    .btn-copy-prompt {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy-prompt {
+      background: #2a2b30;
+      color: #fff;
+      border: 1px solid #333;
+    }
+
+    .btn-copy-prompt:hover {
+      background: #3a3b40;
+    }
+
+    .btn-remix {
+      background: #fff;
+      color: #000;
+      border: none;
+    }
+
+    .btn-remix:hover {
+      background: #e0e0e0;
+    }
+
+    /* Comparison Flow */
+    .comparison-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: #222;
+      border: 1px solid #222;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 24px 0;
+    }
+
+    .comparison-row {
+      display: flex;
+      background: #0b0b0d;
+      align-items: stretch;
+    }
+
+    .comparison-text {
+      flex: 1;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      color: #999;
+      line-height: 1.5;
+    }
+
+    .comparison-img {
+      width: 300px;
+      aspect-ratio: 1;
+      background: #000;
+    }
+
+    .comparison-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @media (max-width: 900px) {
+      .detail-content {
+        flex-direction: column;
+        overflow-y: auto;
+      }
+
+      .detail-img-side {
+        padding: 20px;
+      }
+
+      .detail-info-side {
+        padding: 30px 20px;
+        flex: none;
+      }
+
+      .comparison-row {
+        flex-direction: column;
+      }
+
+      .comparison-img {
+        width: 100%;
+      }
+    }
+
+    @keyframes modalHeaderDrop {
+      0% {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes modalPaneRise {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Gallery Modal Styles */
+    .gallery-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 5000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
+
+    .gallery-modal.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .gallery-modal-content {
+      background: var(--content-bg);
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      transform: scale(0.9);
+      transition: transform 0.35s ease;
+    }
+
+    .gallery-modal.is-open .gallery-modal-content {
+      transform: scale(1);
+    }
+
+    .modal-img-wrap {
+      flex: 1.6;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      min-width: 0;
+    }
+
+    .modal-img-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    .modal-info-wrap {
+      flex: 1;
+      background: var(--content-bg);
+      padding: 40px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      min-width: 320px;
+      border-left: 1px solid var(--border);
+    }
+
+    .modal-info-wrap h3 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .modal-prompt-text {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 0;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: auto;
+    }
+
+    @media (max-width: 768px) {
+      .gallery-modal-content {
+        flex-direction: column;
+        max-width: 95vw;
+        max-height: 95vh;
+      }
+
+      .modal-img-wrap {
+        padding: 20px;
+        min-height: 300px;
+      }
+
+      .modal-info-wrap {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        min-width: auto;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body data-theme="dark">
+ <header class="app-header">
+ <div class="brand">
+ <button class="mobile-menu-btn" id="mobileToggle">☰</button>
+ <a href="/playground" style="text-decoration: none; display: flex; align-items: center; gap: 10px;">
+ <span class="brand-text">Beewant</span>
+ </a>
+ <div class="doc-switcher">
+ <div class="doc-dropdown" id="docSwitcher">
+ <button class="doc-dropdown-toggle">
+ <span>Platform documentation</span>
+ <span class="doc-dropdown-arrow">▼</span>
+ </button>
+ <div class="doc-dropdown-menu">
+ <a href="final doc.html" class="doc-dropdown-item active">Platform documentation</a>
+ <a href="Beewant-Documentation-Clean-Template-11 (3).html" class="doc-dropdown-item">API documentation</a>
+ </div>
+ </div>
+ </div>
+ </div>
+ <div class="header-actions">
+ <div class="lang-switch">
+ <a class="lang-btn is-active" href="final doc.html">EN</a>
+ <a class="lang-btn" href="frenchdoc.html">FR</a>
+ <a class="lang-btn" href="AR.html">AR</a>
+ </div>
+ </div>
+ </header>
+ <div class="app-container">
+ <!-- Sidebar -->
+ <aside class="sidebar" id="sidebar">
+ <input class="search" id="search" placeholder="Search docs (⌘K)" readonly />
+ <nav class="api-nav" id="nav">
+ <h4><a class="section-header nav-link" href="#beewant-account-management"><svg aria-hidden="true" class="sb-ic" viewbox="0 0 24 24">
+ <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor"
+ stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+ <circle cx="12" cy="7" fill="none" r="4" stroke="currentColor" stroke-width="2"></circle>
+ </svg>Account Management</a></h4>
+ <ul>
+ <li><a class="nav-link sub-item" href="#getting-started">Getting Started</a></li>
+ <li><a class="nav-link sub-item" href="#profile-personal-information">Profile &amp; Personal Information</a>
+ </li>
+ <li><a class="nav-link sub-item" href="#security-passwords">Security &amp; Passwords</a></li>
+ <li><a class="nav-link sub-item" href="#api-access-pro-enterprise-only">API Access</a></li>
+ <li><a class="nav-link sub-item" href="#preferences-personalization">Preferences</a></li>
+ <li><a class="nav-link sub-item" href="#plans-billing-subscription-management">Plans &amp; Billing</a></li>
+ </ul>
+ <h4><a class="section-header nav-link" href="#agents-expertise-at-scale"><svg aria-hidden="true" class="sb-ic" viewbox="0 0 24 24">
+ <rect fill="none" height="7" rx="2" stroke="currentColor" stroke-width="2" width="7" x="4" y="4"></rect>
+ <rect fill="none" height="7" rx="2" stroke="currentColor" stroke-width="2" width="7" x="13" y="4"></rect>
+ <rect fill="none" height="7" rx="2" stroke="currentColor" stroke-width="2" width="7" x="4" y="13"></rect>
+ <rect fill="none" height="7" rx="2" stroke="currentColor" stroke-width="2" width="7" x="13" y="13"></rect>
+ </svg>Agents</a></h4>
+ <ul>
+ <li><a class="nav-link sub-item" href="#creating-an-agent">Creation of Agents</a></li>
+ <li><a class="nav-link sub-item" href="#customizing-pre-built-agents">Customize Agents</a></li>
+ <li><a class="nav-link sub-item" href="#share-agents">Share Agents</a></li>
+ </ul>
+ <h4><a class="section-header nav-link" href="#library-collections-knowledge-at-your-fingertips"><svg aria-hidden="true" class="sb-ic" viewbox="0 0 24 24">
+ <path d="M3 7a2 2 0 0 1 2-2h5l2 2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" fill="none"
+ stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+ </svg>Library and Collections</a></h4>
+ <ul>
+ <li><a class="nav-link sub-item" href="#supported-formats">Supported Formats</a></li>
+ <li><a class="nav-link sub-item" href="#create-collections">Create Collection</a></li>
+ <li><a class="nav-link sub-item" href="#share-collections">Share Collection</a></li>
+ </ul>
+ <h4><a class="section-header nav-link" href="#chat-intelligent-conversation-engine"><svg aria-hidden="true" class="sb-ic" viewbox="0 0 24 24">
+ <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8z" fill="none"
+ stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+ </svg>Chat</a></h4>
+ <ul>
+ <li><a class="nav-link sub-item" href="#starting-chat">Start Chat</a></li>
+ <li><a class="nav-link sub-item" href="#chat-with-text">Chat with Text</a></li>
+ <li><a class="nav-link sub-item" href="#chat-with-image">Chat with Image</a></li>
+ <li><a class="nav-link sub-item" href="#chat-with-collections">Chat with Collections</a></li>
+ <li><a class="nav-link sub-item" href="#chat-with-web">Chat with Web</a></li>
+ </ul>
+ <h4><a class="section-header nav-link" href="#technical-recommendations"><svg aria-hidden="true" class="sb-ic" viewbox="0 0 24 24">
+ <path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-linecap="round"
+ stroke-width="2"></path>
+ </svg>Tools</a></h4>
+ <ul>
+ <li><a class="nav-link sub-item" href="#core-capabilities">Core Capabilities</a></li>
+ <li><a class="nav-link sub-item" href="#generating-visual-content">Image generation</a></li>
+ <li><a class="nav-link sub-item" href="#analyzing-data">Analyzing Data</a></li>
+ </ul>
+ <ul>
+ <li><a class="nav-link sub-item has-icon" href="#faq"><svg aria-hidden="true" class="sb-ic" viewbox="0 0 24 24">
+ <circle cx="12" cy="12" fill="none" r="10" stroke="currentColor" stroke-width="2"></circle>
+ <path d="M9.1 9a3 3 0 1 1 4.9 2.3c-.9.6-2 1.4-2 2.7" fill="none" stroke="currentColor"
+ stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+ <path d="M12 17h.01" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="3"></path>
+ </svg>FAQ</a></li>
+ <li><a class="nav-link sub-item" href="#examples-and-use-cases">Examples and Use Cases</a></li>
+ <li><a class="nav-link sub-item" href="#technical-recommendations">Technical Recommendations</a></li>
+ </ul>
+ </nav>
+ </aside>
+ <!-- Main content -->
+ <main class="main-col">
+
+ <div class="content-grid">
+ <div class="content-inner">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <section class="doc-page" data-active="true" data-page="beewant-account-management">
+ <div class="section">
+ <h2 id="beewant-account-management">Beewant Account Management</h2>
+
+ <p>This section explains how to set up, customize, and secure your Beewant account. It walks through each
+ relevant area of the Settings menu with clear, practical instructions.</p>
+
+ <!-- Video Switcher - Account Management -->
+ <div class="video-switcher-container">
+ <div class="video-tabs-wrapper">
+ <div class="video-tabs" role="group">
+ <div class="tab-indicator"></div>
+ <button class="video-tab active" data-video="0">Creating an Account</button>
+ <button class="video-tab" data-video="1">Profile Settings</button>
+ <button class="video-tab" data-video="2">Security Setup</button>
+ </div>
+ </div>
+ <div class="video-content">
+ <div class="video-panel active" data-panel="0">
+ <iframe width="100%" height="400"
+ src="https://www.youtube.com/embed/31ym4wTycbM?start=5&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
+ title="Creating an Account" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
+ </div>
+ <div class="video-panel" data-panel="1" style="display: none;">
+ <iframe width="100%" height="400"
+ src="https://www.youtube.com/embed/W_q3ztTbgA0?start=5&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
+ title="Profile Settings" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
+ </div>
+ <div class="video-panel" data-panel="2" style="display: none;">
+ <iframe width="100%" height="400"
+ src="https://www.youtube.com/embed/W_q3ztTbgA0?start=5&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
+ title="Security Setup" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
+ </div>
+ </div>
+ </div>
+ <h3 id="getting-started">Getting Started</h3>
+ <p>You can create a Beewant account using:</p>
+ <blockquote>
+ <ul>
+ <li>Google (Gmail)</li>
+ <li>Microsoft</li>
+ <li>Email verification</li>
+ </ul>
+ </blockquote>
+ <p>Follow the steps below based on your preferred method.</p>
+ <div class="tip">
+ <strong>TIP:</strong> Choose the authentication method that aligns with your organization's security
+ policies. SSO (Single Sign-On) may be available for Enterprise accounts, which simplifies account
+ management across teams.
+ </div>
+ <h3 id="creating-an-account-with-google-or-microsoft">Creating an Account with Google or Microsoft</h3>
+ <blockquote>
+ <ol>
+ <li><strong>Go to the registration page</strong> Open the Beewant login screen and select
+ <strong>Continue with Google</strong> or <strong>Continue with Microsoft</strong>.
+ </li>
+ <li><strong>Sign in with your account</strong> If you are not already logged in, authenticate with
+ your Google or Microsoft credentials.</li>
+ <li><strong>Automatic account creation</strong> After successful authentication, you will be
+ redirected back to Beewant and your account will be created automatically.</li>
+ </ol>
+ </blockquote>
+ <h3 id="creating-an-account-with-email">Creating an Account with Email</h3>
+ <blockquote>
+ <ol>
+ <li><strong>Go to the registration page</strong> On the Beewant signup screen, select <strong>Continue
+ with Email</strong>.</li>
+ <li><strong>Request a verification code</strong> Enter your email address and submit the form. Beewant
+ will send a verification code to your inbox.</li>
+ <li><strong>Retrieve the code</strong> Open your email inbox, locate the message from Beewant, and
+ copy the verification code.</li>
+ <li><strong>Confirm your email</strong> Paste or type the verification code into the registration form
+ to confirm your email and complete account creation.</li>
+ </ol>
+ </blockquote>
+ <u><strong>If you do not receive the code:</strong></u>
+ <blockquote>
+ <ul>
+ <li><u>Check your spam or junk folder.</u></li>
+ <li><u>Click Send again on the registration form to request a new code.</u></li>
+ <li><u>Confirm that you entered the correct email address.</u></li>
+ </ul>
+ </blockquote>
+ <h3 id="profile-personal-information">Profile &amp; Personal Information</h3>
+ <p>The <strong>Profile</strong> tab in the sidebar lets you view and manage your basic account details.
+ </p>
+ <p>You can:</p>
+ <blockquote>
+ <ul>
+ <li>Update your name, username.</li>
+ <li>Add a profile photo (PNG or JPEG, up to 1 MB, recommended size: 1200 × 1200 px).</li>
+ <li>Manage your contact information, including phone number and address (country, city, region).</li>
+ </ul>
+ </blockquote>
+ <div class="note">
+ <u><strong>BEST PRACTICE:</strong> Use a professional profile photo and keep your contact information
+ current to ensure team members and administrators can reach you when needed.</u>
+ </div>
+ </div>
+ <div class="section">
+ <h2 id="beewant-account-management-security-credentials">Beewant Account Management Security Credentials</h2>
+
+ <h3 id="security-passwords">Security &amp; Passwords</h3>
+ <p>Use the <strong>Security &amp; Access</strong> section to manage how you sign in and protect your
+ account.</p>
+ <p>You can:</p>
+ <blockquote>
+ <ul>
+ <li>Change your password at any time.</li>
+ <li>Reset your password if you forget your login details.</li>
+ <li>Access the <strong>Danger Zone</strong> to permanently delete your account.</li>
+ </ul>
+ </blockquote>
+ <div class="warning">
+ <u><strong>WARNING:</strong> Deleting your account is irreversible. This action removes all your data
+ and active subscriptions. Only proceed if you are certain you no longer need access to Beewant.</u>
+ </div>
+ <div class="note">
+ <u><strong>BEST PRACTICE:</strong> Change your password every 90 days and use a strong, unique password
+ containing uppercase, lowercase, numbers, and special characters. Never share your password with
+ others.</u>
+ </div>
+ <h3 id="api-access-pro-enterprise-only">API Access (Pro &amp; Enterprise only)</h3>
+ <p>The <strong>API Access</strong> tab is available for <strong>Pro</strong> and
+ <strong>Enterprise</strong> customers.
+ </p>
+ <p>With API access, you can:</p>
+ <blockquote>
+ <ul>
+ <li><strong>Generate API tokens</strong> to enable secure, programmatic access to your Beewant
+ workspace. This is ideal for integrations, internal tools, or automation workflows.</li>
+ <li><strong>Copy and rotate tokens</strong> with a single click whenever your security policies or
+ workflows change.</li>
+ </ul>
+ </blockquote>
+ <div class="warning">
+ <u><strong>SECURITY RECOMMENDATION:</strong> Treat API tokens like passwords. Do not share them
+ publicly, embed them in client-side code, or commit them to version control repositories. If you
+ suspect that a token has been exposed, revoke and regenerate it immediately.</u>
+ </div>
+ <div class="tip">
+ <u><strong>TIP:</strong> Store API tokens in environment variables or secure secrets management systems
+ (e.g., AWS Secrets Manager, HashiCorp Vault) rather than hardcoding them in your application.</u>
+ </div>
+ </div>
+ <div class="section">
+ <h2 id="preferences-personalization">Preferences &amp; Personalization</h2>
+
+ <p>In Preferences, you can tailor Beewant to your working style and environment. These settings help
+ ensure that Beewant feels natural and efficient to use in your daily workflows.</p>
+ <p>You can:</p>
+ <blockquote>
+ <ul>
+ <li>Set your preferred interface language.</li>
+ <li>Adjust basic account behaviors and display options.</li>
+ <li>Manage your memories by enabling the memories feature, and you can manage and delete these
+ memories; you can also disable this feature.</li>
+ <li>Switch between light mode and dark mode, so the interface matches your visual comfort and
+ workplace lighting conditions.</li>
+ </ul>
+ </blockquote>
+ <div class="tip">
+ <u><strong>TIP:</strong> Enable the Memory feature if you want Beewant to learn from previous
+ conversations and provide more personalized responses. Disable it if you prefer fresh interactions
+ without context carryover.</u>
+ </div>
+ </div>
+ <div class="section">
+ <h2 id="plans-billing-subscription-management">Plans, Billing &amp; Subscription Management</h2>
+
+ <p>The <strong>Billing</strong> section lets you manage your subscription and understand available
+ options.</p>
+ <p>You can:</p>
+ <blockquote>
+ <ul>
+ <li>Compare all plans—from <strong>Free</strong> to <strong>Pro</strong> and
+ <strong>Enterprise</strong>—and review their included features.
+ </li>
+ <li>Upgrade or change plans at any time.</li>
+ <li>View your payment history and invoices for your records.</li>
+ </ul>
+ </blockquote>
+ <p>Enterprise customers have access to advanced capabilities such as <strong>SSO (Single
+ Sign‑On)</strong>, allowing users to sign in to Beewant with their existing corporate identity
+ provider.</p>
+ <div class="note">
+ <u><strong>NOTE:</strong> SSO is configured by your organization's IT or security team. Once enabled,
+ end users simply log in with their usual company credentials—no additional setup is required on their
+ side.</u>
+ </div>
+ <div class="tip">
+ <u><strong>TIP:</strong> Review your plan usage monthly to ensure you have the appropriate subscription
+ tier for your team's needs.</u>
+ </div>
+ </div>
+ <div class="section-nav"><button class="sec-nav-btn prev" disabled="" type="button"><span
+ class="sec-nav-kicker">Previous</span><span class="sec-nav-label">None</span></button><button
+ class="sec-nav-btn next" data-target="agents-expertise-at-scale" type="button"><span
+ class="sec-nav-kicker">Next</span><span class="sec-nav-label">Agents: Expertise at
+ Scale</span></button></div>
+ </section>
+ <section class="doc-page" data-page="agents-expertise-at-scale">
+ <div class="section">
+ <h2 id="agents-expertise-at-scale">Agents Expertise at Scale</h2>
+
+ <p>Beewant Agents are specialized AI assistants designed to handle specific domains and use cases within
+ the Beewant platform. They help teams automate repetitive workflows, analyze complex data, and deliver
+ tailored recommendations with speed and consistency.</p>
+ <p>Each agent is configured with a clear focus such as financial analysis, contract review, or learning
+ support so users receive precise, context-aware assistance for their tasks. Beewant Agents turn complex
+ processes into simple, conversational experiences.</p>
+
+ <!-- Video Switcher - Agents -->
+ <div class="video-switcher-container">
+ <div class="video-tabs-wrapper">
+ <div class="video-tabs" role="group">
+ <div class="tab-indicator"></div>
+ <button class="video-tab active" data-video="0">Creating Your First Agent</button>
+ <button class="video-tab" data-video="1">Configuring Agent Settings</button>
+ <button class="video-tab" data-video="2">Agent Best Practices</button>
+ </div>
+ </div>
+ <div class="video-content">
+ <div class="video-panel active" data-panel="0">
+ <iframe width="100%" height="400"
+ src="https://www.youtube.com/embed/pwgMBVs48Jk?start=5&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
+ title="Creating Your First Agent" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
+ </div>
+ <div class="video-panel" data-panel="1" style="display: none;">
+ <iframe width="100%" height="400"
+ src="https://www.youtube.com/embed/NtYD_FYMRy0?start=5&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
+ title="Configuring Agent Settings" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
+ </div>
+ <div class="video-panel" data-panel="2" style="display: none;">
+ <iframe width="100%" height="400"
+ src="https://www.youtube.com/embed/5MlJaeqoEAw?start=5&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
+ title="Agent Best Practices" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
+ </div>
+ </div>
+ </div>
+ <h3 id="why-use-agents">Why Use Agents?</h3>
+ <blockquote>
+ <ul>
+ <li>Same behavior across multiple conversations</li>
+ <li>Domain-specific expertise (coding, support, analysis)</li>
+ <li>Consistent quality and tone</li>
+ <li>Easy to maintain and update</li>
+ </ul>
+ </blockquote>
+ <div class="tip">
+ <u><strong>TIP:</strong> Agents are ideal for standardizing responses across teams. Use them to enforce
+ consistent messaging, reduce hallucinations, and ensure quality control.</u>
+ </div>
+ <h3 id="creating-an-agent">Creating an Agent</h3>
+ <p>Go to Agents in the sidebar, click + Create Agent, fill in:</p>
+ <blockquote>
+ <ul>
+ <li><strong>Name</strong> (50 characters max) — identifier for your agent</li>
+ <li><strong>Description</strong> (200 characters max) — what this agent does</li>
+ <li><strong>Instructions</strong> (50,000 characters max) — how the agent should behave</li>
+ <li><strong>Preferred Model</strong> (optional) — default AI model to use</li>
+ </ul>
+ </blockquote>
+ <h4 id="note-writing-good-instructions">Note: Writing Good Instructions</h4>
+ <p>Keep it structured and specific:</p>
+ <pre><button aria-label="Copy" class="copy-btn" title="Copy" type="button"><svg aria-hidden="true" class="copy-ic" viewbox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v12h2V3h12V1z" fill="currentColor"></path><path d="M20 5H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h12v14z" fill="currentColor"></path></svg><svg aria-hidden="true" class="copy-ic copy-ic--ok" viewbox="0 0 24 24"><path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg><span class="copy-txt">Copy</span></button><code>You are a data analyst expert.
+
+Knowledge areas:
+- SQL query optimization
+- Python (pandas, NumPy)
+- Data visualization
+
+Behavior:
+- Ask clarifying questions about data sources
+- Explain technical concepts simply
+- Suggest multiple approaches when relevant
+
+Response style:
+- Professional but approachable
+- Include code examples for technical queries
+- Use bullet points for key findings
+
+Avoid:
+- Assuming data quality without verification
+- Over-complicating solutions
+
+Better than: "Be a helpful data analyst."</code></pre>
+ <div class="note">
+ <u><strong>BEST PRACTICE:</strong> Include at least 1,000+ characters in instructions to provide
+ sufficient context and constraints. Specify what the agent should NOT do to minimize off-topic
+ responses.</u>
+ </div>
+ <div class="tip">
+ <u><strong>TIP:</strong> Use specific role definitions (e.g., "You are a legal compliance reviewer for
+ enterprise contracts") rather than generic instructions. This reduces hallucination and improves
+ relevance.</u>
+ </div>
+ <h3 id="using-agents-in-chat">Using Agents in Chat</h3>
+ <blockquote>
+ <ol>
+ <li>Click the agent icon in the chat input bar</li>
+ <li>Select an agent from the list</li>
+ <li>Start typing—this agent's instructions are guides for all future replies.</li>
+ </ol>
+ </blockquote>
+ <div class="note">
+ <u><strong>NOTE:</strong> Changing agents mid-conversation only applies the new agent's instructions to
+ future messages, not retroactively. Start a new chat if you want a fresh perspective from a different
+ agent.</u>
+ </div>
+ <h3 id="customizing-pre-built-agents">Customizing Pre-built Agents</h3>
+ <blockquote>
+ <ol>
+ <li>Find the agent on the Agents page</li>
+ <li>Click Edit (pencil icon)</li>
+ <li>Change name, description, instructions, or model</li>
+ <li>Click Create to save as a personal copy</li>
+ </ol>
+ </blockquote>
+ <div class="tip">
+ <u><strong>TIP:</strong> Always create a copy of pre-built agents before editing them. This preserves
+ the original and allows you to revert if needed.</u>
+ </div>
+ <h3 id="managing-agents">Managing Agents</h3>
+ <p>Find agents:</p>
+ <blockquote>
+ <ul>
+ <li>Use the search bar to find by name</li>
+ <li>Filter by tab: All, My agents, Groups, Agents Public, Agents by Beewant.</li>
+ </ul>
+ </blockquote>
+ <p>Delete unused agents:</p>
+ <blockquote>
+ <ul>
+ <li>Click the menu (⋮) and select Delete</li>
+ <li>Keep your Agents library clean</li>
+ </ul>
+ </blockquote>
+ <div class="tip">
+ <u><strong>TIP:</strong> Regularly audit your Agents library and delete outdated or underutilized agents
+ to reduce clutter and improve discoverability.</u>
+ </div>
+ <h3 id="share-agents">Share Agents</h3>
+ <p>Agents in Beewant can be shared, giving you flexibility between targeted collaboration and wider
+ visibility. You can do that by clicking on (⋮) where you can find both options: invite members and
+ publish agents.</p>
+ <blockquote>
+ <ul>
+ <li>You can generate a shareable link for an agent and send it via email, or you can copy a generated
+ link and send it to specific members, so they can use it while it remains organized inside your
+ group's Agents workspace.</li>
+ <li>You can also share an agent more broadly across Beewant, making it available to all users in the
+ workspace so everyone can benefit from the same configured instructions.</li>
+ </ul>
+ </blockquote>
+ <div class="tip">
+ <u><strong>TIP:</strong> Document your agent's purpose and usage guidelines (e.g., expected input
+ format, typical response time, known limitations) when sharing widely to ensure consistent
+ adoption.</u>
+ </div>
+ </div>
+ <div class="section-nav"><button class="sec-nav-btn prev" data-target="beewant-account-management"
+ type="button"><span class="sec-nav-kicker">Previous</span><span class="sec-nav-label">Beewant Account
+ Management</span></button><button class="sec-nav-btn next"
+ data-target="library-collections-knowledge-at-your-fingertips" type="button"><span
+ class="sec-nav-kicker">Next</span><span class="sec-nav-label">Library &amp; Collections: Knowledge at
+ Your Fingertips</span></button></div>
+ </section>
+ <section class="doc-page" data-page="library-collections-knowledge-at-your-fingertips">
+ <div class="section">
+ <h2 id="library-collections-knowledge-at-your-fingertips">Library &amp; Collections Knowledge at Your
+ Fingertips</h2>
+
+ <p>Collections in Beewant enable users to group multiple indexed media such as documents, audio files, and
+ videos into cohesive sets for seamless interactions. This feature streamlines content management by
+ allowing users to manage, update, and retrieve related media as unified collections. Collections enhance
+ collaborative and structured workflows, letting users leverage grouped content dynamically within chat,
+ search, and agent sessions.</p>
+
+ <!-- Video Switcher - Library -->
+ <div class="video-switcher-container">
+ <div class="video-tabs-wrapper">
+ <div class="video-tabs" role="group">
+ <div class="tab-indicator"></div>
+ <button class="video-tab active" data-video="0">Beewant Collection</button>
+ <button class="video-tab" data-video="1">Beewant Collection</button>
+ <button class="video-tab" data-video="2">Beewant Collection</button>
+ </div>
+ </div>
+ <div class="video-content">
+ <div class="video-panel active" data-panel="0">
+ <iframe width="100%" height="400"
+ src="https://www.youtube.com/embed/UWgnzzELYz0?start=5&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
+ title="Formats de fichiers supportés" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
+ </div>
+ <div class="video-panel" data-panel="1" style="display: none;">
+ <iframe width="100%" height="400"
+ src="https://www.youtube.com/embed/FdGZoHLLEY0?start=5&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
+ title="Transcription IA Automatique" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
+ </div>
+ <div class="video-panel" data-panel="2" style="display: none;">
+ <iframe width="100%" height="400"
+ src="https://www.youtube.com/embed/8fwMmwKiynk?start=5&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
+ title="Identification des locuteurs" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
+ </div>
+ </div>
+ </div>
+ <div class="tip">
+ <u><strong>TIP:</strong> Use Collections to organize content by project, client, department, or time
+ period. This makes retrieval faster and enables efficient batch analysis.</u>
+ </div>
+ <h3 id="supported-formats">Supported Formats</h3>
+ <h4 id="documents">Documents</h4>
+ <ul>
+ <li><strong>PDF</strong> (text, image, or OCR) - Use PDFs to bring in reports, slide exports, contracts,
+ or scanned documents. Beewant can read both digital text PDFs and scanned/image PDFs (once processed
+ with OCR), allowing users to summarize and ask questions about the full content.</li>
+ <li><strong>Word (DOCX, DOC)</strong> - Upload Word files for policies, proposals, briefs, and internal
+ documentation. These files are ideal when teams frequently revise content, as Beewant can surface the
+ latest version structure, headings, and body text in responses.</li>
+ </ul>
+ <div class="note">
+ <u><strong>NOTE: Only the latest version of a file is indexed. If you update a file, re-upload it or use
+ the Reindex button to ensure Beewant accesses the newest content.</strong></u>
+ </div>
+ <ul>
+ <li><strong>PowerPoint (PPTX)</strong> - Use PowerPoint decks to analyze presentations, training
+ materials, and client slideware. Beewant can work across slides to extract talking points, summarize
+ sections, and answer questions about charts, bullet lists, and speaker notes.</li>
+ </ul>
+ <ul>
+ <li><strong>Excel (XLSX)</strong> - Upload Excel files for structured data such as KPIs, financial
+ models, logs, or tracking sheets. Beewant can help interpret tables, identify trends, and answer
+ targeted questions about specific columns, rows, or metrics.</li>
+ </ul>
+ <ul>
+ <li><strong>Markdown (MD)</strong> - Use Markdown files for technical documentation, changelogs,
+ READMEs, and lightweight specs. These are especially useful for engineering teams, as Beewant
+ preserves headings and structure to make navigation and querying more intuitive.</li>
+ </ul>
+ <h4 id="code-and-text">Code and Text</h4>
+ <ul>
+ <li><strong>TXT</strong> - Plain text files are best for raw notes, transcripts, quick exports, or
+ legacy content. They provide a simple way to bring unstructured information into Beewant for search
+ and Q&amp; A.</li>
+ <li><strong>HTML</strong> - Upload HTML when you want to analyze web pages, internal portals, or
+ exported app views. Beewant focuses on the readable text content, making it easier to work with page
+ copy without needing to open a browser.</li>
+ <li><strong>CSS</strong> - CSS files are useful when reviewing or documenting design systems and styling
+ rules. Beewant can help explain selectors, variables, and layout behavior, or support front-end teams
+ during reviews.</li>
+ <li><strong>JavaScript</strong> - Use JavaScript files to document front-end logic, workflows, or small
+ utilities. Beewant can assist with understanding code behavior, identifying key functions, and
+ clarifying how parts of the script interact.</li>
+ <li><strong>Python</strong> - Python files are ideal for data pipelines, scripts, and backend logic.
+ Beewant can help interpret functions, modules, and workflows, making it easier for teams to onboard,
+ refactor, or document existing code.</li>
+ <li><strong>CSV</strong> - CSV files are suited to tabular exports from CRMs, analytics tools, or
+ databases. Beewant can read and reason over rows and columns, helping users explore data, spot
+ patterns, and answer specific data questions.</li>
+ </ul>
+ <div class="note">
+ <u><strong>TIP: Use clear column headers and consistent formatting to improve analysis
+ accuracy.</strong></u>
+ </div>
+ <ul>
+ <li><strong>JSON</strong> - Use JSON for configuration files, API responses, logs, or structured app
+ data. Beewant can parse nested structures, explain fields, and support debugging or documentation of
+ your data models.</li>
+ </ul>
+ <h4 id="media">Media</h4>
+ <ul>
+ <li><strong>MP4 (video)</strong> - Upload MP4 videos to work with recordings such as meetings,
+ trainings, webinars, or demos. Beewant can help extract key moments, summarize content, and answer
+ questions about what was discussed or shown.</li>
+ </ul>
+ <div class="note">
+ <u><strong>NOTE: Videos are automatically transcribed. Transcription time depends on video length; allow
+ several minutes for processing.</strong></u>
+ </div>
+ <ul>
+ <li><strong>MP3 (audio)</strong> - Use MP3 files for voice notes, interviews, podcasts, or call
+ recordings. Once processed, Beewant can surface themes, turn conversations into structured notes, and
+ support follow-up questions on the audio content.</li>
+ <li><strong>YouTube URLs</strong> - Paste YouTube links to analyze public videos without downloading
+ them manually. Beewant can derive summaries, highlight important sections, and enable Q&amp; A around
+ the video's topics, making external content easier to reuse in your workflows.</li>
+ </ul>
+ <p>Beewant's video and audio features turn recordings into searchable, reusable knowledge that is easy to
+ review, edit, and export. These capabilities are designed to support workflows like meeting
+ documentation, training analysis, interviews, and research.</p>
+ <h3 id="automatic-transcription">Automatic Transcription</h3>
+ <p>Every video and audio file uploaded to Beewant is automatically transcribed. The full text of the
+ recording is indexed with timestamps, so you can quickly jump to specific moments and search for exact
+ phrases across your media. Speaker turns are labeled (for example, SPEAKER_01, SPEAKER_02, etc.), making
+ multi-speaker conversations easier to follow and analyze.</p>
+ <div class="note">
+ <u><strong>TIP: Search transcripts for specific keywords or time ranges to quickly locate relevant
+ discussion points.</strong></u>
+ </div>
+ <h3 id="customize-speaker-names">Customize Speaker Names</h3>
+ <p>To make transcripts more readable and useful, you can rename speakers with meaningful labels. Open the
+ video sidebar, click the gear icon in the video sidebar, then replace generic labels (such as
+ SPEAKER_01) with real names like "John" or "Marketing Lead." After editing, click Save.</p>
+ <h3 id="download-transcriptions">Download Transcriptions</h3>
+ <p>Transcripts can be exported for use in reports, documentation, or external tools. From the video
+ sidebar, click the download icon, choose your preferred format (TXT, JSON, or PDF), and then select
+ Export. This gives you a portable copy of the transcription that can be archived, shared, or integrated
+ into other systems as needed.</p>
+ <div class="note">
+ <u><strong>BEST PRACTICE:</strong> Export transcripts in JSON format if you plan to integrate them with
+ external systems or perform automated analysis.</u>
+ </div>
+ <p>After renaming speakers in a transcript, reindexing ensures that the new names are fully applied to
+ search and analysis.</p>
+ <h3 id="limits">Limits</h3>
+ <blockquote>
+ <ul>
+ <li>Max 50 files per upload</li>
+ <li>Max 100MB per file</li>
+ </ul>
+ </blockquote>
+ <div class="warning">
+ <u><strong>WARNING:</strong> If either of these limits is exceeded, the user receives a notification
+ indicating that the upload cannot proceed until the number of files or file size is reduced to comply
+ with the constraints. Batch uploads in multiple iterations if you have a large repository.</u>
+ </div>
+ <h3 id="upload-files">Upload Files</h3>
+ <p><strong>Via button</strong></p>
+ <blockquote>
+ <ol>
+ <li>Go to Library in the sidebar</li>
+ <li>Click on the index media button</li>
+ <li>Select files</li>
+ </ol>
+ </blockquote>
+ <p><strong>Via drag &amp; drop</strong></p>
+ <blockquote>
+ <ul>
+ <li>Drag files directly into the Library table</li>
+ </ul>
+ </blockquote>
+ <h3 id="view-and-manage-indexed-media">View and Manage Indexed Media</h3>
+ <p>Indexed documents appear as rows within the collection's interface. Each entry displays:</p>
+ <blockquote>
+ <ul>
+ <li>A "Chat" button to interact with or analyze the indexed file</li>
+ <li>Media type — Documents, audio files, videos, or presentations.</li>
+ <li>Indexing date</li>
+ <li>Quick actions: Reindex (refresh if indexing fails or if content changes) and Delete (remove file
+ from the collection)</li>
+ </ul>
+ </blockquote>
+ <h3 id="create-collections">Create Collections</h3>
+ <p>Creating collections in Beewant makes it easier to turn scattered files into structured, reusable
+ knowledge spaces for you and your team. By grouping documents, videos, and audio around a project,
+ topic, or goal, collections become a single place to work, search, and collaborate rather than jumping
+ between separate files.</p>
+ <p>Group files by project, topic, or purpose:</p>
+ <blockquote>
+ <ol>
+ <li>Click on "+" in the Collections section</li>
+ <li>Select files from library</li>
+ <li>Add them to the collection via bulk actions "Add to collection" button, or you can drag the files
+ and drop them on the target collection.</li>
+ <li>Collections appear in the left sidebar for quick access.</li>
+ </ol>
+ </blockquote>
+ <div class="note">
+ <u><strong>TIP: Name your collections with a clear, consistent naming convention (e.g.,
+ "Project_ClientName_2025" or "Department_ResearchPhase_Q4"). This makes them easier to search and
+ organize.</strong></u>
+ </div>
+ <h3 id="share-collections">Share Collections</h3>
+ <p>Collections in Beewant offer flexible sharing options to support both private collaboration and broad
+ accessibility. Users can share collections with specific individuals by generating unique access
+ links—only those with the link can view or interact with the collection. Alternatively, collections can
+ be made public, allowing any Beewant user to discover and access the content without requiring a special
+ link.</p>
+ <p><strong>With specific people:</strong></p>
+ <blockquote>
+ <ol>
+ <li>Open the collection menu (⋮)</li>
+ <li>Click Invite member</li>
+ <li>Enter their email and click Send</li>
+ <li>Or generate a link and share it</li>
+ </ol>
+ </blockquote>
+ <p><strong>Make public:</strong></p>
+ <blockquote>
+ <ol>
+ <li>Open the collection menu (⋮)</li>
+ <li>Click Publish</li>
+ <li>Select Make public</li>
+ <li>All Beewant users can now discover and view it</li>
+ </ol>
+ </blockquote>
+ <div class="note">
+ <u><strong>NOTE: Only the owner can modify or delete the collection, even when shared.</strong></u>
+ </div>
+ <h3 id="manage-files">Manage Files</h3>
+ <p><strong>Delete a file:</strong></p>
+ <blockquote>
+ <ol>
+ <li>Click the trash icon next to the file</li>
+ <li>Confirm the deletion</li>
+ <li>File is permanently removed</li>
+ </ol>
+ </blockquote>
+ <div class="warning">
+ <u><strong>WARNING: File deletion is permanent and cannot be undone. Verify you no longer need a file
+ before deleting it.</strong></u>
+ </div>
+ <p><strong>Bulk select:</strong></p>
+ <blockquote>
+ <ul>
+ <li>Use checkboxes to select multiple files at once</li>
+ </ul>
+ </blockquote>
+ </div>
+ <div class="section-nav"><button class="sec-nav-btn prev" data-target="agents-expertise-at-scale"
+ type="button"><span class="sec-nav-kicker">Previous</span><span class="sec-nav-label">Agents: Expertise
+ at Scale</span></button><button class="sec-nav-btn next"
+ data-target="chat-intelligent-conversation-engine" type="button"><span
+ class="sec-nav-kicker">Next</span><span class="sec-nav-label">Chat: Intelligent Conversation
+ Engine</span></button></div>
+ </section>
+ <section class="doc-page" data-page="chat-intelligent-conversation-engine">
+ <div class="section">
+ <h2 id="chat-intelligent-conversation-engine">Chat Intelligent Conversation Engine</h2>
+
+ <p>Beewant provides an interactive and versatile chat platform enabling seamless engagement with diverse
+ media types. Whether interacting with plain text, analyzing images, exploring indexed documents, or
+ navigating media collections, the chat experience is designed to adapt intelligently to various content
+ formats and user needs. Alongside this, Beewant offers a robust, categorized set of integrated tools
+ that empower users to manage documents and content, conduct comprehensive web research, generate and
+ edit images, manage GitHub repositories, and create professional documents and presentations all within
+ a unified assistant interface. This cohesive ecosystem ensures users have access to powerful,
+ context-aware capabilities that streamline workflows and enhance productivity in every interaction.</p>
+
+ <!-- Video Switcher - Chat -->
+ <div class="video-switcher-container">
+ <div class="video-tabs-wrapper">
+ <div class="video-tabs" role="group">
+ <div class="tab-indicator"></div>
+ <button class="video-tab active" data-video="0">Chat Basics</button>
+ <button class="video-tab" data-video="1">Working with Images</button>
+ <button class="video-tab" data-video="2">Using Collections in Chat</button>
+ </div>
+ </div>
+ <div class="video-content">
+ <div class="video-panel active" data-panel="0">
+ <iframe width="100%" height="400"
+ src="https://www.youtube.com/embed/81dtHPpBQM8?start=5&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
+ title="Chat Basics" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
+ </div>
+ <div class="video-panel" data-panel="1" style="display: none;">
+ <iframe width="100%" height="400"
+ src="https://www.youtube.com/embed/64-0XtvVVzY?start=5&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
+ title="Working with Images" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
+ </div>
+ <div class="video-panel" data-panel="2" style="display: none;">
+ <iframe width="100%" height="400"
+ src="https://www.youtube.com/embed/aAuPg5x1w7s?start=5&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
+ title="Using Collections in Chat" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
+ </div>
+ </div>
+ </div>
+ <h3 id="starting-chat">Starting Chat</h3>
+ <p>Click New chat in the sidebar to start a fresh conversation. All tools are enabled by default.</p>
+ <div class="tip">
+ <u><strong>TIP:</strong> Start a new chat for each distinct topic or project. This keeps conversations
+ focused and makes history easier to navigate.</u>
+ </div>
+ <h3 id="organizing-chats">Organizing Chats</h3>
+ <blockquote>
+ <ul>
+ <li><strong>Rename:</strong> Three-dot menu → Rename (50 char limit)</li>
+ <li><strong>Favorite:</strong> Three-dot menu → Add to favorites (⭐)</li>
+ <li><strong>Delete:</strong> Three-dot menu → Delete (permanent)</li>
+ <li><strong>View history:</strong> Click any chat in "Recent searches" to use it</li>
+ </ul>
+ </blockquote>
+ <div class="note">
+ <u><strong>BEST PRACTICE:</strong> Rename chats with descriptive titles (e.g., "Q4_MarketAnalysis" or
+ "Client_ProjectReview") rather than leaving them as "Chat 1," "Chat 2," etc.</u>
+ </div>
+ <h3 id="chat-modes">Chat Modes</h3>
+ <h4 id="chat-with-text">Chat with Text</h4>
+ <p>The <strong>Chat with Text</strong> feature in Beewant enables users to have dynamic, context-aware
+ conversations using plain language. It supports rich discussions that help you extract insights, clarify
+ information, and collaborate more effectively through a familiar chat interface. Users can also choose
+ from a wide range of advanced AI models such as GPT‑5.1, Claude Sonnet 5.1, Llama 3.3, Mistral 2, R1
+ Deepseek, Deepseek v3, Qwen 3, Gemini 3 Pro, and GLM 4.5, so each conversation can be optimized for
+ specific tasks, performance needs, or organizational preferences.</p>
+ <div class="tip">
+ <u><strong>TIP: Be as specific as possible in your prompts. Instead of "Analyze this data," try "Analyze
+ this sales data for Q4 2024 and identify the top three growth opportunities by region."</strong></u>
+ </div>
+ <div class="tip">
+ <u><strong>TIP: Use follow-up questions to refine responses. If an answer isn't quite right, ask Beewant
+ to adjust tone, format, or focus rather than starting over.</strong></u>
+ </div>
+ <h4 id="chat-with-image">Chat with Image</h4>
+ <p>The Chat with Image feature in Beewant lets users work with visual content as naturally as they do with
+ text. Users can upload an image, ask questions about it, and receive clear, context-aware analysis and
+ descriptions tailored to their needs.</p>
+ <div class="tip">
+ <strong>TIP: For best results, upload high-resolution images with good lighting and minimal
+ compression.</strong>
+ </div>
+ <h4 id="chat-with-collections">Chat with Collections</h4>
+ <p>The Chat with Collection feature in Beewant allows users to engage naturally with organized media
+ collections, including documents, audio, and video files. By leveraging indexed content, it supports
+ efficient navigation, in-depth analysis, and meaningful information retrieval from unified media sets
+ all through a user-friendly chat interface. This feature enables context-aware interactions, promoting
+ deeper comprehension and improved productivity when working with rich, multifaceted multimedia content.
+ </p>
+ <blockquote>
+ <ul>
+ <li>Select a specific collection</li>
+ <li>Ask questions about its contents</li>
+ <li>Analyze documents, videos, and audio together</li>
+ </ul>
+ </blockquote>
+ <div class="note">
+ <u><strong>TIP: Prefix your questions with "In this collection, …" to ensure Beewant focuses only on
+ indexed files rather than searching the web.</strong></u>
+ </div>
+ <h4 id="chat-with-web">Chat with Web</h4>
+ <p>The Chat with Web feature in Beewant enriches conversations by integrating real-time web content
+ directly into the chat flow. Users can seamlessly analyze and discuss web pages, extract relevant
+ information, and draw insights from online sources. This capability ensures that your interactions
+ remain up-to-date with the latest information, providing a deeper, more informed chat experience.</p>
+ <blockquote>
+ <ul>
+ <li>Real-time web content analysis</li>
+ <li>Extract information from web pages</li>
+ <li>Stay current with latest information</li>
+ </ul>
+ </blockquote>
+ <div class="note">
+ <u><strong>BEST PRACTICE: Use Chat with Web for time-sensitive queries (e.g., market trends, current
+ events). For static or proprietary information, rely on Collections instead.</strong></u>
+ </div>
+ <h3 id="switching-agents-models">Switching Agents &amp; Models</h3>
+ <p><em>Change agent:</em></p>
+ <blockquote>
+ <ol>
+ <li>Click the agent dropdown in the input bar</li>
+ <li>Select a different agent</li>
+ <li>Future messages use the new agent</li>
+ </ol>
+ </blockquote>
+ <div class="note">
+ <u><strong>NOTE:</strong> Changing agents mid-conversation only affects subsequent replies. Previous
+ messages retain their original agent's instructions.</u>
+ </div>
+ <p><em>Change model:</em></p>
+ <blockquote>
+ <ol>
+ <li>Click the model dropdown (shows current model name)</li>
+ <li>Select a different model</li>
+ <li>Model changes immediately for next message</li>
+ </ol>
+ </blockquote>
+ <p><em>Available models:</em></p>
+ <blockquote>
+ <ul>
+ <li>Qwen3 — Optimized for logical, analytical tasks</li>
+ <li>Deepseek v3 — Fast reasoning with balanced accuracy</li>
+ <li>Deepseek R1 — Deep research and complex reasoning</li>
+ <li>Llama3.3 — Efficient, cost-effective general purpose</li>
+ <li>GPT5.1 — Advanced reasoning and creativity</li>
+ <li>Claude4.5 — Long context, nuanced understanding</li>
+ <li>Gemini3 Pro — Multimodal (image, text, audio)</li>
+ <li>Mistral 2 — Multilingual and specialized domains</li>
+ </ul>
+ </blockquote>
+ <div class="tip">
+ <u><strong>TIP: Choose Qwen3 or Deepseek R1 for logical/analytical tasks. Use GPT5.1 or Claude4.5 for
+ creative or nuanced work.</strong></u>
+ </div>
+ <div class="tip">
+ <u><strong>TIP: Different models have different latency profiles. Experiment to find the best balance
+ between speed and quality for your workflow.</strong></u>
+ </div>
+ <p><em>Response Tabs</em></p>
+ <p>Each response shows multiple tabs:</p>
+ <table>
+ <tr>
+ <th>Tab</th>
+ <th>Contains</th>
+ </tr>
+ <tr>
+ <td>Answer</td>
+ <td>Main response</td>
+ </tr>
+ <tr>
+ <td>Steps</td>
+ <td>How the response was generated (tool usage, timing)</td>
+ </tr>
+ <tr>
+ <td>Sources</td>
+ <td>Web search citations (when applicable)</td>
+ </tr>
+ <tr>
+ <td>Assets</td>
+ <td>Generated images, documents, files</td>
+ </tr>
+ </table>
+ <div class="tip">
+ <u><strong>TIP:</strong> Check the Steps tab to understand Beewant's reasoning and identify where
+ refinements are needed.</u>
+ </div>
+ </div>
+ <div class="section-nav"><button class="sec-nav-btn prev"
+ data-target="library-collections-knowledge-at-your-fingertips" type="button"><span
+ class="sec-nav-kicker">Previous</span><span class="sec-nav-label">Library &amp; Collections: Knowledge
+ at Your Fingertips</span></button><button class="sec-nav-btn next"
+ data-target="technical-recommendations" type="button"><span class="sec-nav-kicker">Next</span><span
+ class="sec-nav-label">Tools: The Engine Behind Every Output</span></button></div>
+ </section>
+ <section class="doc-page" data-page="technical-recommendations">
+ <div class="section">
+ <h2 id="tools-the-engine-behind-every-output">Tools The Engine Behind Every Output</h2>
+
+ <p>A comprehensive AI assistant that enables you to create, analyze, and manage various types of content
+ and data through natural conversation. It bridges the gap between your ideas and professional outputs
+ across multiple formats and sources.</p>
+
+ <!-- Video Switcher - Tools -->
+ <div class="video-switcher-container">
+ <div class="video-tabs-wrapper">
+ <div class="video-tabs" role="group">
+ <div class="tab-indicator"></div>
+ <button class="video-tab active" data-video="0">Available Tools Overview</button>
+ <button class="video-tab" data-video="1">Document Tools</button>
+ <button class="video-tab" data-video="2">Advanced Features</button>
+ </div>
+ </div>
+ <div class="video-content">
+ <div class="video-panel active" data-panel="0">
+ <iframe width="100%" height="400"
+ src="https://www.youtube.com/embed/CGrwahFuN-E?start=5&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
+ title="Available Tools Overview" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
+ </div>
+ <div class="video-panel" data-panel="1" style="display: none;">
+ <iframe width="100%" height="400"
+ src="https://www.youtube.com/embed/T-p3IjGGt6Q?start=5&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
+ title="Document Tools" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
+ </div>
+ <div class="video-panel" data-panel="2" style="display: none;">
+ <iframe width="100%" height="400"
+ src="https://www.youtube.com/embed/sl1k_BWZBDA?start=5&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
+ title="Advanced Features" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
+ </div>
+ </div>
+ </div>
+ <div class="tip">
+ <u><strong>TIP:</strong> Combine multiple tools in a single conversation. For example, research a topic
+ using Chat with Web, generate visualizations, and then create a presentation with all assets
+ included.</u>
+ </div>
+ <h3 id="core-capabilities">Core Capabilities</h3>
+ <p class="highlight-detail"><u>Document Creation</u>: Generate professional Word documents, PowerPoint
+ presentations, and Excel spreadsheets with structured content and formatting. You can also pick any
+ Beewant slide theme you like and inject generated imagery directly into decks.</p>
+ <p class="highlight-detail"><u>Web Research</u>: Access current information through live web searches and
+ extract detailed content from specific web pages.</p>
+ <p class="highlight-detail"><u>Image Generation</u>: Create custom images from text descriptions and edit
+ existing images with specific modifications.</p>
+ <p class="highlight-detail"><u>Code Development</u>: Generate and manage code files in various programming
+ languages for web development and data visualization.</p>
+ <p class="highlight-detail"><u>Data Analysis</u>: Work with structured data, create charts, and build
+ comprehensive dashboards in Excel.</p>
+ <p class="highlight-detail"><u>File Management</u>: Handle file operations including zipping, unzipping,
+ and organizing multiple files efficiently.</p>
+ <p class="highlight-detail"><u>Repository Exploration</u>: Search and analyze GitHub repositories to
+ understand codebases, find relevant projects, and examine file structures.</p>
+ <p><em>EXAMPLES:</em></p>
+ <p>"Create a business proposal with executive summary, market analysis, and financial projections
+ section."</p>
+ <p>Request current information about any subject, and the assistant searches the web to provide
+ up-to-date, relevant details with sources.</p>
+ <p>For example: "Find recent statistics about remote work productivity and summarize key findings."</p>
+ <h3 id="generating-visual-content">Image generation</h3>
+ <p>Click <strong>Explore</strong> to open the immersive gallery, browse cinematic previews, and tap any
+ frame to read the exact prompt that produced it.</p>
+
+ <div class="img-gallery-container" id="galleryTrigger">
+ <div class="img-gallery-preview-grid">
+ <img src="./gen_cyberpunk.png" alt="Generated showcase 1">
+ <img src="./gen_phoenix.png" alt="Generated showcase 2">
+ <img src="./gen_island.png" alt="Generated showcase 3">
+ <img src="./gen_kitten.png" alt="Generated showcase 4">
+ <img src="./gen_airship.png" alt="Generated showcase 5">
+ <img src="./gen_astronaut.png" alt="Generated showcase 6">
+ <img src="./generated 7.png" alt="Generated showcase 7">
+ <img src="./generated 8.png" alt="Generated showcase 8">
+ </div>
+ <div class="img-gallery-overlay">
+ <button class="btn-explore">Explore</button>
+ </div>
+ </div>
+
+ <p>Describe the image you want, including style, content, and technical specifications. The assistant
+ creates custom images matching your description.</p>
+ <div class="tip">
+ <u><strong>TIP:</strong> Include specific details like "use a corporate blue and white color scheme,
+ modern minimalist design, 16:9 aspect ratio" for better results.</u>
+ </div>
+
+ <h4 id="edit-images">Edit images</h4>
+ <div class="comparison-container">
+ <div class="comparison-row">
+ <div class="comparison-text">"Generate an image of a red Ferrari."</div>
+ <div class="comparison-img"><img src="./red.png" alt="Ferrari red concept"></div>
+ </div>
+ <div class="comparison-row">
+ <div class="comparison-text">"Now make it blue."</div>
+ <div class="comparison-img"><img src="./blue.png" alt="Ferrari blue concept"></div>
+ </div>
+ </div>
+ <h3 id="analyzing-data">Analyzing Data</h3>
+ <p>Provide your data or describe the analysis you need, and the assistant creates spreadsheets, charts, or
+ comprehensive dashboards to visualize and interpret the information.</p>
+ <p>For example: "Create a sales dashboard showing monthly revenue trends with bar charts and key metrics."
+ </p>
+ <div class="tip">
+ <u><strong>TIP:</strong> Upload sample data or describe your data structure (columns, row count, data
+ types) to get more accurate outputs.</u>
+ </div>
+ <h3 id="practical-applications">Practical Applications</h3>
+ <p><strong>Business Presentations:</strong> Develop complete PowerPoint decks with custom graphics, data
+ visualizations, and professional styling for client meetings or internal reviews.</p>
+ <p><strong>Research Reports:</strong> Compile comprehensive documents that combine web research, data
+ analysis, and proper citations for academic or professional use.</p>
+ <p><strong>Project Documentation:</strong> Generate technical documentation, user guides, or API
+ references with proper formatting, code examples, and visual elements.</p>
+ <p><strong>Data Visualization:</strong> Transform raw data into insightful charts, graphs, and interactive
+ dashboards that highlight trends and support decision-making.</p>
+ <p><strong>Content Creation:</strong> Produce blog posts, articles, or marketing materials that
+ incorporate current information, custom images, and professional formatting.</p>
+ <section id="technical-recommendations"></section>
+ <h3 id="getting-better-results">Getting Better Results</h3>
+ <p><strong>Be Specific:</strong> Instead of "make a presentation," try "create a 10-slide presentation
+ about renewable energy trends with charts showing solar adoption rates."</p>
+ <p><strong>Provide Context:</strong> Share the purpose, audience, and desired outcome to help tailor the
+ output to your exact needs.</p>
+ <p><strong>Iterate:</strong> Use initial outputs as starting points, then refine with specific feedback
+ like "make the charts more colorful" or "add a conclusion section."</p>
+ <p><strong>Combine Capabilities:</strong> Leverage multiple tools together—research a topic, create
+ images, then compile everything into a comprehensive document.</p>
+ <p><strong>Set Clear Parameters:</strong> Specify formats, styles, sizes, and other requirements upfront
+ to reduce revision cycles.</p>
+ <div class="note">
+ <u><strong>BEST PRACTICE:</strong> For complex projects, break requests into smaller, sequential steps
+ rather than asking for everything at once. This improves accuracy and allows for iterative
+ refinement.</u>
+ </div>
+ </div>
+ <div class="section">
+ <h2 id="quick-tips">Quick Tips</h2>
+
+ <blockquote>
+ <ul>
+ <li>Rename chats meaningfully for organization</li>
+ <li>Star favorite chats for quick access</li>
+ <li>Check Steps tab to see how AI reasoned</li>
+ <li>Use specific agent for specialized tasks</li>
+ <li>Match model to task (Qwen3 for logic, GPT5.1 for creativity)</li>
+ <li>Customize pre-built agents for your use case</li>
+ <li>Test outputs thoroughly before sharing with stakeholders</li>
+ <li>Use descriptive file names to keep your Library organized</li>
+ <li>Combine tools in a single request for maximum automation</li>
+ </ul>
+ </blockquote>
+ </div>
+ <div class="section">
+ <h2 id="sidebar-navigation">Sidebar Navigation</h2>
+
+ <p>Quick access to all features:</p>
+ <table>
+ <tr>
+ <th>Button</th>
+ <th>Function</th>
+ </tr>
+ <tr>
+ <td>New chat</td>
+ <td>Start a fresh conversation</td>
+ </tr>
+ <tr>
+ <td>Agents</td>
+ <td>Create and manage agents</td>
+ </tr>
+ <tr>
+ <td>Library</td>
+ <td>Upload and organize media</td>
+ </tr>
+ <tr>
+ <td>Recent searches</td>
+ <td>View chat history by date</td>
+ </tr>
+ </table>
+ </div>
+ <div class="section-nav"><button class="sec-nav-btn prev" data-target="chat-intelligent-conversation-engine"
+ type="button"><span class="sec-nav-kicker">Previous</span><span class="sec-nav-label">Chat: Intelligent
+ Conversation Engine</span></button><button class="sec-nav-btn next" data-target="faq"
+ type="button"><span class="sec-nav-kicker">Next</span><span class="sec-nav-label">FAQ</span></button>
+ </div>
+ </section>
+ <section class="doc-page" data-page="faq">
+ <div class="section">
+ <h2 id="faq">FAQ</h2>
+
+ <h3 id="can-i-use-multiple-agents-in-one-chat">Can I use multiple agents in one chat?</h3>
+ <p>Yes. Switch agents anytime using the agent selector. Only future messages use the new agent.</p>
+ <h3 id="are-my-library-files-private">Are my Library files private?</h3>
+ <p>Yes, by default. You can invite specific people or make collections public.</p>
+ <h3 id="what-happens-if-i-delete-a-chat">What happens if I delete a chat?</h3>
+ <p>Permanent deletion. Deleted chats cannot be recovered.</p>
+ <h3 id="how-do-i-ensure-consistent-agent-behavior">How do I ensure consistent agent behavior?</h3>
+ <p>Write specific, detailed instructions. Test the agent with diverse queries. Update instructions based
+ on performance.</p>
+ <h3 id="can-i-collaborate-on-collections-with-my-team">Can I collaborate on Collections with my team?</h3>
+ <p>Yes. Share collections with specific members via email invite or generate a shareable link. For broad
+ access, publish the collection to your workspace.</p>
+ <h3 id="how-long-does-indexing-take-for-large-files">How long does indexing take for large files?</h3>
+ <p>Indexing depends on file size and type. Most files (under 100MB) are indexed within 2–5 minutes. Very
+ large or complex files may take longer.</p>
+ <h3 id="what-should-i-do-if-transcription-accuracy-is-poor">What should I do if transcription accuracy is
+ poor?</h3>
+ <p>Ensure audio quality is high (clear speech, minimal background noise). Re-upload with better audio if
+ available, or manually edit the transcript using the speaker name customization feature.</p>
+ <h3 id="how-can-i-build-a-custom-agent-for-my-teams-workflow">How can I build a custom agent for my team's
+ workflow?</h3>
+ <blockquote>
+ <ol>
+ <li>Identify the domain/expertise needed (e.g., "Financial Analysis")</li>
+ <li>Define what the agent should know (knowledge areas, data sources)</li>
+ <li>Specify how it should behave (tone, process, constraints)</li>
+ <li>Test with sample queries before sharing widely</li>
+ <li>Document expected inputs and outputs</li>
+ </ol>
+ </blockquote>
+ <h3 id="whats-the-difference-between-agents-and-just-using-beewant-directly">What's the difference between
+ agents and just using Beewant directly?</h3>
+ <p>Agents encode your expertise, standards, and company knowledge so it's consistent, scalable, and
+ hands-free. One request to a trained agent orchestrates multiple tools and applies your business logic
+ automatically.</p>
+ </div>
+ <div class="section-nav"><button class="sec-nav-btn prev" data-target="technical-recommendations"
+ type="button"><span class="sec-nav-kicker">Previous</span><span class="sec-nav-label">Tools: The Engine
+ Behind Every Output</span></button><button class="sec-nav-btn next"
+ data-target="examples-and-use-cases" type="button"><span class="sec-nav-kicker">Next</span><span
+ class="sec-nav-label">EXAMPLES AND USE CASES</span></button></div>
+ </section>
+ <section class="doc-page" data-page="examples-and-use-cases">
+ <div class="section">
+ <h2 id="examples-and-use-cases">Examples and Use Cases</h2>
+
+ <h3 id="example-procurement-ready-vendor-comparison">Example: "Procurement-ready vendor comparison"</h3>
+ <p>Goal: A security/IT team wants to choose a vendor (e.g., a transcription provider) and needs a decision
+ memo that's consistent with internal requirements and formatting standards.</p>
+ <h4 id="web-search-alone-chat-with-web-only">Web Search Alone (Chat with Web Only)</h4>
+ <p>User prompt: "Compare Vendor A vs Vendor B for enterprise transcription. Include pricing, security, and
+ compliance."</p>
+ <p>What happens (typical outcome):</p>
+ <blockquote>
+ <ul>
+ <li>The assistant pulls fresh info from the web and summarizes it.</li>
+ <li>But the result often varies in structure and depth depending on how the user asks.</li>
+ <li>It may miss internal constraints (required compliance checklist, preferred decision template, how
+ to label risk, the tone needed for leadership).</li>
+ </ul>
+ </blockquote>
+ <p>Output quality: Good summary, but not reliably "company-ready."</p>
+ <h4 id="agents-web-search-beewant-way">Agents + Web Search (Beewant Way)</h4>
+ <p><strong>Step 1 — Create a dedicated Agent</strong></p>
+ <p>Create an agent with detailed instructions (structured and specific).</p>
+ <p>Agent name: "Procurement Analyst (Security &amp; Compliance)" Agent instructions (example):</p>
+ <blockquote>
+ <ul>
+ <li>"Always produce a vendor comparison in the following structure: Executive summary → Requirements
+ checklist → Risk notes → Recommendation."</li>
+ <li>"Always use Chat with Web for up-to-date vendor claims; never assume missing data—mark as 'Not
+ found'."</li>
+ <li>"Ask 2 clarifying questions first: required compliance (SOC2/ISO), region (EU/US), and deployment
+ constraints."</li>
+ <li>"Keep tone enterprise/procurement."</li>
+ </ul>
+ </blockquote>
+ <p>This is exactly what Agents are for: consistent behavior, domain-specific expertise, and repeatable
+ quality across conversations.</p>
+ <p><strong>Step 2 — Run one simple request</strong></p>
+ <p>User prompt (simple): "Compare Vendor A vs Vendor B for enterprise transcription and recommend one."
+ </p>
+ <p><strong>What the Agent does automatically (key difference)</strong></p>
+ <p>Because the Agent has rules, it orchestrates Web Search in a controlled way:</p>
+ <blockquote>
+ <ul>
+ <li>It first asks clarifying questions (so it doesn't guess requirements).</li>
+ <li>It uses Chat with Web / Web Research to fetch the latest claims, docs, and updates.</li>
+ <li>It formats the final result in a consistent "decision memo" format every time (so it's ready for
+ internal sharing).</li>
+ <li>It explicitly labels unknowns instead of filling gaps (reduces hallucination risk).</li>
+ </ul>
+ </blockquote>
+ <p><strong>Output quality: what you get (example structure)</strong></p>
+ <blockquote>
+ <ul>
+ <li>Executive summary: 3–5 bullets + recommendation (with rationale).</li>
+ <li>Requirements checklist: Security/compliance/SLAs/data handling (pass/partial/unknown).</li>
+ <li>Risk notes: Anything not verified from web sources is flagged as unknown.</li>
+ <li>Next steps: "Ask vendor for SOC2 report / DPA / data retention policy" (actionable).</li>
+ </ul>
+ </blockquote>
+ <p><strong>Why this is better in Beewant context</strong></p>
+ <blockquote>
+ <ul>
+ <li>Web Search gives freshness; Agents give repeatability, policy, structure, and guardrails.</li>
+ <li>The agent turns a one-off web summary into a reusable workflow standard that any teammate can run
+ with the same quality.</li>
+ <li>It reduces "prompt skill" dependency: the user can stay simple ("compare A vs B") while the agent
+ enforces the correct process and output format.</li>
+ </ul>
+ </blockquote>
+ <h3 id="2-example-generating-images-without-agents">2. Example: Generating Images (Without Agents)</h3>
+ <p><strong>Scenario:</strong> A marketing manager needs a consistent set of product launch visuals (same
+ brand style, same layout rules, same colors, same typography, same format) for LinkedIn + website hero +
+ blog header.</p>
+ <p><strong>User workflow (no agent):</strong></p>
+ <blockquote>
+ <ol>
+ <li>User opens a chat and writes a long prompt: "Create a minimalist product launch image. Use our
+ brand colors. Modern style. Add headline text. Make it suitable for LinkedIn."</li>
+ <li>The user realizes they forgot specs → asks again: "Make it 1200x627 and leave space for logo."
+ </li>
+ <li>Style is slightly different → asks again: "Use the same template but different headline."</li>
+ <li>Repeat 10–30 times to get a consistent set.</li>
+ </ol>
+ </blockquote>
+ <p><strong>Typical outcome:</strong></p>
+ <blockquote>
+ <ul>
+ <li>Good images, but consistency depends on how well the user remembers to include the same
+ constraints every time.</li>
+ <li>More back-and-forth. More "prompting work" to keep brand alignment consistent.</li>
+ <li>Harder to scale across a team (everyone prompts differently).</li>
+ </ul>
+ </blockquote>
+ <h3 id="example-generating-images-with-an-agent">Example: Generating images (with an Agent)</h3>
+ <p><strong>Step 1 — Create a "Brand Creative Director" Agent</strong></p>
+ <p><strong>Agent name:</strong> Brand Creative Director</p>
+ <p><strong>Description:</strong> Generates on-brand marketing visuals with consistent style and
+ export-ready specs.</p>
+ <p><strong>Agent instructions:</strong></p>
+ <blockquote>
+ <ul>
+ <li>You are a Brand Creative Director for our company.</li>
+ <li>Your job is to generate images that always follow our brand identity and formatting rules.</li>
+ <li>Before generating, ask only the minimum clarifying questions needed (max 2). If not provided, use
+ safe defaults and state them.</li>
+ <li>Always output image generation prompts with:
+ <ul>
+ <li>Visual style (e.g., minimalist, modern, enterprise)</li>
+ <li>Composition rules (clear focal point, whitespace zone for logo)</li>
+ <li>Text rules (short headline, readable contrast, avoid clutter)</li>
+ <li>Platform format rules (LinkedIn, website hero, blog header)</li>
+ </ul>
+ </li>
+ <li>Always propose 3 variations:
+ <ul>
+ <li>"Clean corporate"</li>
+ <li>"Bold announcement"</li>
+ <li>"Product-focused"</li>
+ </ul>
+ </li>
+ <li>Never invent brand colors, fonts, or logo rules. If missing, ask for them or use placeholders and
+ label them clearly.</li>
+ </ul>
+ </blockquote>
+ <p><strong>Step 2 — The user writes a simple request</strong></p>
+ <p><strong>User prompt (simple):</strong> "Create a bird flying for our launch campaign."</p>
+ <p><strong>What happens (why this is better)</strong></p>
+ <p>Because the Agent is pre-loaded with rules, the user doesn't need to remember specs every time:</p>
+ <blockquote>
+ <ol>
+ <li>The Agent asks 1–2 questions (only if needed), for example:
+ <ul>
+ <li>"Which platform: LinkedIn / website hero / blog header?"</li>
+ <li>"Do you want it photorealistic or illustrated?"</li>
+ </ul>
+ </li>
+ <li>The Agent then produces <strong>consistent, production-ready prompts</strong> for the Image
+ Generation tool, such as:
+ <ul>
+ <li>Version A (Clean corporate): minimalist, lots of whitespace, bird centered, subtle gradient
+ background, reserved logo area, short headline suggestion.</li>
+ <li>Version B (Bold announcement): higher contrast, dynamic motion blur, stronger CTA space.</li>
+ <li>Version C (Product-focused): bird flying above a subtle product silhouette, brand-like
+ geometry.</li>
+ </ul>
+ </li>
+ </ol>
+ </blockquote>
+ <p><strong>Outcome:</strong></p>
+ <blockquote>
+ <ul>
+ <li>The user can keep asking simple requests ("Now make it a dolphin jumping", "Now make it a rocket",
+ "Now make it a handshake") and still get outputs that match the same campaign style.</li>
+ <li>It scales across the company: anyone can use the same Agent and get the same brand consistency.
+ </li>
+ <li>Faster iterations: fewer re-prompts, less manual "spec remembering".</li>
+ </ul>
+ </blockquote>
+ <h3 id="example-legal-ai-note-taking-vendor-selection-web-search-vs-tools-websearch">Example: "Legal AI
+ Note-Taking Vendor Selection" (Web Search vs Tools: Web Search)</h3>
+ <h4 id="goal">Goal</h4>
+ <p>A legal operations team needs a decision memo to choose an AI meeting note-taking tool, covering
+ competitors, pricing, security/compliance, and a recommendation.</p>
+ <h4 id="option-a-simple-web-search-search-summarize">Option A — Simple Web Search (Search + Summarize)</h4>
+ <p><strong>User Does:</strong> Uses Chat with Web and asks: "Compare AI meeting note-taking tools for
+ legal teams and recommend one."</p>
+ <p><strong>What happens:</strong></p>
+ <blockquote>
+ <ul>
+ <li>The assistant searches the web and produces a narrative summary of the topic.</li>
+ <li>The output quality depends heavily on the prompt (what the user remembered to ask for).</li>
+ <li>If key details are missing (SOC 2, HIPAA, retention policy, whether data is used for training,
+ real pricing), the answer may:
+ <ul>
+ <li>Skip those points, or</li>
+ <li>Mention them without strong verification, or</li>
+ <li>Mix primary and secondary sources without clearly separating them.</li>
+ </ul>
+ </li>
+ </ul>
+ </blockquote>
+ <p><strong>Typical result:</strong> A useful overview, but not reliably "procurement-ready" because it's
+ optimized for summarization, not verification and decision structure.</p>
+ <h4 id="option-b-beewant-tools-react-reasoning-acting">Option B — Beewant Tools (ReAct: Reasoning + Acting)</h4>
+ <p><strong>User does:</strong> Runs the same request with Tools enabled (ReAct). "Create a decision memo
+ to select an AI meeting note-taking tool for legal teams."</p>
+ <p><strong>What happens:</strong></p>
+ <blockquote>
+ <p><strong>1. Reasoning (define what must be true):</strong></p>
+ <ul>
+ <li>What counts as "legal note-taking" vs generic meeting notes?</li>
+ <li>Which vendor facts must be verified (pricing, compliance, retention, training policy,
+ integrations)?</li>
+ <li>Which sources are acceptable (prefer official pricing/security/docs pages)?</li>
+ </ul>
+ <p><strong>2. Acting (targeted research actions):</strong></p>
+ <ul>
+ <li>Pulls official vendor pages for pricing, security, privacy, and product documentation.</li>
+ <li>Cross-checks third-party sources only when needed (e.g., lawsuits, external audits).</li>
+ <li>Collects evidence and flags missing public info.</li>
+ </ul>
+ <p><strong>3. Reasoning (structured synthesis):</strong></p>
+ <ul>
+ <li>Converts findings into a consistent memo format and a comparison matrix.</li>
+ <li>Labels any unverified fields as <strong>"Not found"</strong> instead of guessing.</li>
+ <li>Produces clear next steps (what to request from vendors).</li>
+ </ul>
+ </blockquote>
+ <p><strong>Typical result:</strong> A decision-ready memo that's consistent, auditable, and safer for
+ enterprise use.</p>
+ <h4 id="why-it-matters">Why It Matters</h4>
+ <blockquote>
+ <ul>
+ <li><strong>Web Search</strong> is great when you want fast awareness and general context.</li>
+ <li><strong>Tools (ReAct)</strong> is what you use when the output must be
+ <strong>actionable</strong>, <strong>verifiable</strong>, and <strong>ready for
+ leadership/procurement</strong>, because the assistant doesn't just fetch information—it follows a
+ reasoning-and-action workflow: define requirements → gather evidence → validate → produce
+ deliverable.
+ </li>
+ </ul>
+ </blockquote>
+ <p>Understood. The correct framing (and the one to use in your documentation) is:</p>
+ <blockquote>
+ <ul>
+ <li><strong>Chat</strong> = the normal conversational interface (default mode).</li>
+ <li><strong>Tools (ReAct)</strong> = the capability layer you can trigger inside chat (web search,
+ image generation, document creation, etc.). It's not "web search only"; it's reasoning + acting
+ across these tools.</li>
+ <li><strong>Agents</strong> = a separate layer that sets consistent behavior/brand rules/process, and
+ can use Tools (ReAct) when needed.</li>
+ <li><strong>Collections</strong> = your internal knowledge base you can chat with (and it can be used
+ alongside Tools when appropriate).</li>
+ </ul>
+ </blockquote>
+ <h3 id="chat-vs-tools">Chat vs Tools</h3>
+ <h4 id="chat-only-no-tools">Chat Only (No Tools):</h4>
+ <blockquote>
+ <ul>
+ <li>Best for brainstorming, explanations, rewriting, and internal reasoning.</li>
+ <li>Limitation: can't fetch fresh web info, can't generate images/docs as outputs.</li>
+ </ul>
+ </blockquote>
+ <h4 id="chat-tools">Chat + Tools:</h4>
+ <blockquote>
+ <ul>
+ <li>Best when you need the assistant to <em>do work</em>, not just talk:
+ <ul>
+ <li>Web search + validate sources</li>
+ <li>Generate images from prompts</li>
+ <li>Create documents/presentations/spreadsheets</li>
+ </ul>
+ </li>
+ <li>Key difference: Tools produces <strong>outputs</strong> <strong>and</strong>
+ <strong>artifacts</strong>, not just text.
+ </li>
+ </ul>
+ </blockquote>
+ <h4 id="tools-vs-agents">Tools vs Agents</h4>
+ <p><strong>Tools without Agents:</strong></p>
+ <blockquote>
+ <ul>
+ <li>Powerful, but the user must repeat requirements every time (format, tone, brand rules, compliance
+ rules, etc.).</li>
+ </ul>
+ </blockquote>
+ <p><strong>Agents + Tools:</strong></p>
+ <blockquote>
+ <ul>
+ <li>Same power, but now it's consistent and scalable:
+ <ul>
+ <li>The agent carries the "how we do things here" (brand voice, formats, rules).</li>
+ <li>The user can ask short prompts and still get the correct result.</li>
+ </ul>
+ </li>
+ </ul>
+ </blockquote>
+ </div>
+ <div class="section-nav"><button class="sec-nav-btn prev" data-target="faq" type="button"><span
+ class="sec-nav-kicker">Previous</span><span class="sec-nav-label">FAQ</span></button><button
+ class="sec-nav-btn next" disabled="" type="button"><span class="sec-nav-kicker">Next</span><span
+ class="sec-nav-label">End</span></button></div>
+ </section>
+ </div>
+ <aside class="right-toc" id="rightToc">
+ <div class="toc-card">
+ <div class="toc-title">Contents</div>
+ <ul class="toc-list" id="tocList"></ul>
+ </div>
+ </aside>
+ </div>
+ </aside>
+ </div>
+
+ <footer>
+ <p>&copy; 2024 Beewant. All rights reserved.</p>
+ </footer>
+
+ <div aria-hidden="true" class="command-overlay" id="commandOverlay" role="dialog">
+ <div class="command-panel" role="document">
+ <div class="command-input-wrap">
+ <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+ viewBox="0 0 24 24">
+ <circle cx="11" cy="11" r="7"></circle>
+ <line x1="16.65" y1="16.65" x2="21" y2="21"></line>
+ </svg>
+ <input autocomplete="off" id="commandInput" placeholder="Search documentation..." type="text" />
+ <span class="command-hint">⌘ K</span>
+ </div>
+ <div class="command-meta" id="commandMeta">Recent</div>
+ <div class="command-results" id="commandResults"></div>
+ </div>
+ </div>
+
+ <script>
+
+    (function () {
+      const sidebar = document.getElementById('sidebar');
+      const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+      const mobileToggle = document.getElementById('mobileToggle');
+      const header = document.querySelector('.app-header');
+
+      // Mobile sidebar toggle
+      mobileToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+      });
+
+      // Scroll to section with offset
+      const headerHeight = () => header.offsetHeight || 60;
+      function scrollToId(hash) {
+        if (!hash) return;
+        const target = document.querySelector(hash);
+        if (!target) return;
+        const top = target.getBoundingClientRect().top + window.pageYOffset;
+        const offset = headerHeight() + 20;
+        window.scrollTo({ top: Math.max(0, top - offset), behavior: 'smooth' });
+      }
+
+      // Nav link clicks
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const href = link.getAttribute('href');
+          if (window.innerWidth <= 980) sidebar.classList.remove('open');
+          scrollToId(href);
+        });
+      });
+
+      // Active link tracking
+      const sections = Array.from(document.querySelectorAll('main [id]')).filter(s => s.id);
+      function updateActiveLink() {
+        const offset = headerHeight() + 30;
+        let closest = null;
+        let closestDistance = Infinity;
+        sections.forEach(s => {
+          const rect = s.getBoundingClientRect();
+          const distance = Math.abs(rect.top - offset);
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closest = s;
+          }
+        });
+        if (closest) {
+          navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + closest.id));
+        }
+      }
+
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            updateActiveLink();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+      updateActiveLink();
+
+      // Search filter removed in favor of global command palette
+    })();
+
+  </script>
+ <div aria-hidden="true" aria-modal="true" class="tutorial-modal" id="tutorialModal" role="dialog">
+ <div class="tutorial-dialog" role="document">
+ <div class="tutorial-gallery">
+ <div class="tutorial-topbar">
+ <div class="tutorial-meta">
+ <div class="title" id="tutorialTitle">Tutorial</div>
+ <div class="sub" id="tutorialCounter">0 / 0</div>
+ </div>
+ <div class="tutorial-actions">
+ <button class="tbtn" id="zoomOut" title="Zoom out" type="button">−</button>
+ <button class="tbtn" id="zoomReset" title="Reset zoom" type="button">Reset</button>
+ <button class="tbtn" id="zoomIn" title="Zoom in" type="button">+</button>
+ <button class="tbtn" id="tutorialClose" title="Close" type="button">Close</button>
+ </div>
+ </div>
+ <div class="tutorial-switch" id="tutorialSwitch" style="display: none">
+ <button class="tbtn tbtn-active" id="tabVideo" type="button">Video</button>
+ <button class="tbtn" id="tabImages" type="button">Images</button>
+ </div>
+ <div class="tutorial-stage" id="tutorialStage">
+ <button aria-label="Previous image" class="nav-arrow nav-prev" id="prevImg" type="button">‹</button>
+ <div class="tutorial-videowrap" id="tutorialVideoWrap" style="display: none">
+ <iframe id="tutorialVideo" class="tutorial-video" title="Tutorial video" frameborder="0"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+ allowfullscreen></iframe>
+ </div>
+ <div class="tutorial-imgwrap">
+ <img alt="Tutorial image" class="tutorial-img" id="tutorialImg" />
+ </div>
+ <button aria-label="Next image" class="nav-arrow nav-next" id="nextImg" type="button">›</button>
+ </div>
+ <div class="tutorial-bottombar">
+ <div aria-label="Thumbnails" class="thumbs" id="tutorialThumbs"></div>
+ <div class="zoom-level" id="zoomLevel">100%</div>
+ </div>
+ </div>
+ </div>
+ </div>
+ <script>
+    /* Tutorial Gallery Script v3 */
+    (function () {
+      const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+      const isInteractive = (el) => !!(el && (el.closest('.nav-arrow') || el.closest('.tbtn') || el.closest('.thumb')));
+
+      function init() {
+        const modal = document.getElementById('tutorialModal');
+        if (!modal) return;
+
+        const closeBtn = document.getElementById('tutorialClose');
+        const titleEl = document.getElementById('tutorialTitle');
+        const counterEl = document.getElementById('tutorialCounter');
+        const stage = document.getElementById('tutorialStage');
+        const img = document.getElementById('tutorialImg');
+        const thumbs = document.getElementById('tutorialThumbs');
+        const prevBtn = document.getElementById('prevImg');
+        const nextBtn = document.getElementById('nextImg');
+        const zoomIn = document.getElementById('zoomIn');
+        const zoomOut = document.getElementById('zoomOut');
+        const zoomReset = document.getElementById('zoomReset');
+        const zoomLevel = document.getElementById('zoomLevel');
+
+        if (!closeBtn || !titleEl || !counterEl || !stage || !img || !thumbs || !prevBtn || !nextBtn || !zoomIn || !zoomOut || !zoomReset || !zoomLevel) {
+          console.warn('Tutorial gallery: missing elements');
+          return;
+        }
+
+        let images = [];
+        let index = 0;
+
+        // zoom/pan
+        let scale = 1;
+        let tx = 0;
+        let ty = 0;
+        let dragging = false;
+        let dragStart = { x: 0, y: 0, tx: 0, ty: 0 };
+
+        // swipe
+        let swipeStartX = 0;
+        let swipeStartY = 0;
+        let swipeActive = false;
+
+        // pinch
+        let pinchActive = false;
+        let pinchStartDist = 0;
+        let pinchStartScale = 1;
+
+        function applyTransform() {
+          img.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+          zoomLevel.textContent = `${Math.round(scale * 100)}%`;
+        }
+
+        function resetZoom() {
+          scale = 1;
+          tx = 0;
+          ty = 0;
+          applyTransform();
+        }
+
+        function setScale(next) {
+          scale = clamp(next, 1, 4);
+          if (scale === 1) { tx = 0; ty = 0; }
+          applyTransform();
+        }
+
+        function preloadAround() {
+          // preload next/prev for smoother navigation
+          const next = images[index + 1];
+          const prev = images[index - 1];
+          [next, prev].filter(Boolean).forEach(src => { const i = new Image(); i.src = src; });
+        }
+
+        function buildThumbs() {
+          thumbs.innerHTML = '';
+          images.forEach((src, i) => {
+            const t = document.createElement('button');
+            t.type = 'button';
+            t.className = 'thumb';
+            t.setAttribute('aria-current', i === index ? 'true' : 'false');
+            t.innerHTML = `<img src="${src}" alt="Thumbnail ${i + 1}" loading="lazy" />`;
+            t.addEventListener('click', (e) => { e.preventDefault(); index = i; render(); });
+            thumbs.appendChild(t);
+          });
+        }
+
+        function render() {
+          if (!images.length) {
+            img.removeAttribute('src');
+            img.alt = 'No tutorial images';
+            counterEl.textContent = '0 / 0';
+            prevBtn.disabled = true;
+            nextBtn.disabled = true;
+            thumbs.innerHTML = '';
+            resetZoom();
+            return;
+          }
+
+          index = clamp(index, 0, images.length - 1);
+          img.src = images[index];
+          img.alt = `Tutorial image ${index + 1}`;
+          counterEl.textContent = `${index + 1} / ${images.length}`;
+          prevBtn.disabled = (index === 0);
+          nextBtn.disabled = (index === images.length - 1);
+
+          thumbs.querySelectorAll('.thumb').forEach((t, i) => {
+            t.setAttribute('aria-current', i === index ? 'true' : 'false');
+          });
+
+          resetZoom();
+          preloadAround();
+        }
+
+        function open(title, imgs) {
+          titleEl.textContent = title || 'Tutorial';
+          images = (imgs || []).slice();
+          index = 0;
+          buildThumbs();
+          modal.classList.add('is-open');
+          modal.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+          render();
+        }
+
+        function close() {
+          modal.classList.remove('is-open');
+          modal.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+          images = [];
+          index = 0;
+          resetZoom();
+        }
+
+        function next() { if (index < images.length - 1) { index++; render(); } }
+        function prev() { if (index > 0) { index--; render(); } }
+
+        // Wire tutorial buttons
+        document.querySelectorAll('.tutorial-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const section = btn.getAttribute('data-tutorial') || '';
+            const sectionEl = btn.closest('.section');
+            const h2 = sectionEl ? sectionEl.querySelector('h2') : null;
+            const title = (h2 ? h2.textContent.trim() : section) + ' — Tutorial';
+            const imgs = (btn.getAttribute('data-images') || '').split(',').map(s => s.trim()).filter(Boolean);
+            open(title, imgs);
+          });
+        });
+
+        // Controls (stopPropagation so stage doesn't treat it as swipe/pan)
+        closeBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); close(); });
+        prevBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); prev(); });
+        nextBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); next(); });
+
+        zoomReset.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); resetZoom(); });
+        zoomIn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); setScale(scale + 0.25); });
+        zoomOut.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); setScale(scale - 0.25); });
+
+        // Close on backdrop
+        modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+
+        // Keyboard
+        document.addEventListener('keydown', (e) => {
+          if (modal.getAttribute('aria-hidden') !== 'false') return;
+          if (e.key === 'Escape') close();
+          if (e.key === 'ArrowLeft') prev();
+          if (e.key === 'ArrowRight') next();
+          if (e.key === '+' || e.key === '=') setScale(scale + 0.25);
+          if (e.key === '-' || e.key === '_') setScale(scale - 0.25);
+        });
+
+        // Wheel zoom
+        stage.addEventListener('wheel', (e) => {
+          if (modal.getAttribute('aria-hidden') !== 'false') return;
+          if (isInteractive(e.target)) return;
+          e.preventDefault();
+          const delta = e.deltaY > 0 ? -0.15 : 0.15;
+          setScale(scale + delta);
+        }, { passive: false });
+
+        // Double click zoom toggle
+        img.addEventListener('dblclick', (e) => {
+          e.preventDefault();
+          if (scale === 1) setScale(2);
+          else resetZoom();
+        });
+
+        // Pointer swipe/pan (ignore clicks on buttons)
+        stage.addEventListener('pointerdown', (e) => {
+          if (modal.getAttribute('aria-hidden') !== 'false') return;
+          if (isInteractive(e.target)) return;
+          if (e.button != null && e.button !== 0) return;
+
+          stage.setPointerCapture(e.pointerId);
+          swipeActive = true;
+          swipeStartX = e.clientX;
+          swipeStartY = e.clientY;
+
+          if (scale > 1) {
+            dragging = true;
+            dragStart = { x: e.clientX, y: e.clientY, tx, ty };
+          }
+        });
+
+        stage.addEventListener('pointermove', (e) => {
+          if (!swipeActive) return;
+          if (dragging) {
+            tx = dragStart.tx + (e.clientX - dragStart.x);
+            ty = dragStart.ty + (e.clientY - dragStart.y);
+            applyTransform();
+          }
+        });
+
+        stage.addEventListener('pointerup', (e) => {
+          if (!swipeActive) return;
+          const dx = e.clientX - swipeStartX;
+          const dy = e.clientY - swipeStartY;
+          swipeActive = false;
+          dragging = false;
+
+          if (scale === 1) {
+            if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+              if (dx < 0) next();
+              else prev();
+            }
+          }
+        });
+
+        // Touch pinch to zoom
+        stage.addEventListener('touchstart', (e) => {
+          if (modal.getAttribute('aria-hidden') !== 'false') return;
+          if (e.touches.length === 2) {
+            pinchActive = true;
+            const [a, b] = e.touches;
+            pinchStartDist = Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY);
+            pinchStartScale = scale;
+          }
+        }, { passive: true });
+
+        stage.addEventListener('touchmove', (e) => {
+          if (!pinchActive) return;
+          if (e.touches.length === 2) {
+            const [a, b] = e.touches;
+            const d = Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY);
+            const ratio = d / (pinchStartDist || d);
+            setScale(pinchStartScale * ratio);
+          }
+        }, { passive: true });
+
+        stage.addEventListener('touchend', (e) => { if (e.touches.length < 2) pinchActive = false; }, { passive: true });
+
+        close();
+      }
+
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+      else init();
+    })();
+
+
+    // ====== Paging + TOC + Copy (combined v5) ======
+    (function () {
+      const pages = Array.from(document.querySelectorAll('.doc-page'));
+      if (!pages.length) return;
+
+      const docAPI = window.__beewantDocs || (window.__beewantDocs = {});
+      const headerEl = document.querySelector('.app-header');
+      const pageById = new Map(pages.map(p => [p.dataset.page, p]));
+      const navLinks = Array.from(document.querySelectorAll('aside.sidebar nav.api-nav a.nav-link'));
+
+      const headerOffset = () => (headerEl?.offsetHeight || 60) + 20;
+
+      function scrollToAnchor(anchorId, behavior = 'smooth') {
+        if (!anchorId) return;
+        const el = document.getElementById(anchorId);
+        if (!el) return;
+        const top = el.getBoundingClientRect().top + window.pageYOffset - headerOffset();
+        window.scrollTo({ top: Math.max(0, top), behavior });
+      }
+
+      function setActivePage(pageId) {
+        pages.forEach(p => p.dataset.active = (p.dataset.page === pageId) ? 'true' : 'false');
+        navLinks.forEach(a => {
+          const href = a.getAttribute('href') || '';
+          if (!href.startsWith('#')) return;
+          if (a.classList.contains('sub-item')) return;
+          a.classList.toggle('active', href.slice(1) === pageId);
+        });
+        buildToc(pageId);
+      }
+
+      function findPageForAnchor(anchorId) {
+        for (const p of pages) {
+          if (p.querySelector('#' + CSS.escape(anchorId))) return p.dataset.page;
+        }
+        return pages[0].dataset.page;
+      }
+
+      function buildToc(pageId) {
+        const tocList = document.getElementById('tocList');
+        if (!tocList) return;
+        tocList.innerHTML = '';
+
+        const page = pageById.get(pageId);
+        if (!page) return;
+
+        const headings = Array.from(page.querySelectorAll('h3[id], h4[id]'));
+        headings.forEach(h => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.className = 'toc-link';
+          a.href = '#' + h.id;
+          a.innerHTML = `<span class="toc-bullet"></span><span>${h.textContent.trim().replace(/^[0-9]+\.\s*/, '').replace(/[:]$/, '').replace(/[.?]$/, '')}</span>`;
+          a.addEventListener('click', () => setActivePage(pageId));
+          li.appendChild(a);
+          tocList.appendChild(li);
+        });
+
+        const links = Array.from(tocList.querySelectorAll('a.toc-link'));
+        const ids = headings.map(h => h.id);
+
+        function onScroll() {
+          let current = null;
+          for (const id of ids) {
+            const el = document.getElementById(id);
+            if (!el) continue;
+            const rect = el.getBoundingClientRect();
+            if (rect.top <= 140) current = id;
+          }
+          links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+        }
+
+        window.removeEventListener('scroll', window.__tocScrollHandler || (() => { }));
+        window.__tocScrollHandler = onScroll;
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      }
+
+      navLinks.forEach(a => {
+        a.addEventListener('click', (e) => {
+          const href = a.getAttribute('href') || '';
+          if (!href.startsWith('#')) return;
+          const anchorId = href.slice(1);
+          const targetPage = a.classList.contains('sub-item') ? findPageForAnchor(anchorId) : anchorId;
+          setActivePage(targetPage);
+          requestAnimationFrame(() => scrollToAnchor(anchorId));
+          e.preventDefault();
+        }, { capture: true });
+      });
+
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.sec-nav-btn');
+        if (!btn) return;
+        const target = btn.getAttribute('data-target');
+        if (!target) return;
+        setActivePage(target);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      async function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        ta.style.top = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+      }
+
+      document.addEventListener('click', async (e) => {
+        const btn = e.target.closest('button.copy-btn');
+        if (!btn) return;
+        const pre = btn.closest('pre');
+        const code = pre ? pre.querySelector('code') : null;
+        if (!code) return;
+
+        try {
+          await copyText(code.textContent);
+          btn.classList.add('is-copied');
+          const txt = btn.querySelector('.copy-txt');
+          if (txt) txt.textContent = 'Copied';
+          window.clearTimeout(btn.__copyTimer);
+          btn.__copyTimer = window.setTimeout(() => {
+            btn.classList.remove('is-copied');
+            if (txt) txt.textContent = 'Copy';
+          }, 1400);
+        } catch (err) { }
+      });
+
+      docAPI.setActivePage = setActivePage;
+      docAPI.findPageForAnchor = findPageForAnchor;
+      docAPI.scrollToAnchor = scrollToAnchor;
+
+      const initialHash = (location.hash || '').slice(1);
+      if (initialHash) {
+        setActivePage(findPageForAnchor(initialHash));
+        requestAnimationFrame(() => scrollToAnchor(initialHash, 'auto'));
+      } else {
+        setActivePage(pages[0].dataset.page);
+      }
+    })();
+  </script>
+
+ <script>
+    // Video tutorial enhancement (non-breaking addition)
+    (function () {
+      const modal = document.getElementById('tutorialModal');
+      if (!modal) return;
+
+      const switchWrap = document.getElementById('tutorialSwitch');
+      const tabVideo = document.getElementById('tabVideo');
+      const tabImages = document.getElementById('tabImages');
+      const videoWrap = document.getElementById('tutorialVideoWrap');
+      const iframe = document.getElementById('tutorialVideo');
+      const imgWrap = modal.querySelector('.tutorial-imgwrap');
+
+      if (!switchWrap || !tabVideo || !tabImages || !videoWrap || !iframe || !imgWrap) return;
+
+      let currentVideos = [];
+      let currentImages = [];
+      let videoIndex = 0;
+      let isVideoMode = false;
+
+      function ytToEmbed(url) {
+        try {
+          const u = new URL(url.trim());
+          let id = '';
+          if (u.hostname.includes('youtu.be')) {
+            id = u.pathname.replace('/', '').trim();
+          } else {
+            id = u.searchParams.get('v') || '';
+          }
+          return id ? `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1` : '';
+        } catch (e) { return ''; }
+      }
+
+      function showVideo() {
+        if (!currentVideos.length || videoIndex >= currentVideos.length) return;
+        imgWrap.style.display = 'none';
+        videoWrap.style.display = 'flex';
+        iframe.src = ytToEmbed(currentVideos[videoIndex]);
+        isVideoMode = true;
+      }
+
+      function showImages() {
+        iframe.src = '';
+        videoWrap.style.display = 'none';
+        imgWrap.style.display = 'flex';
+        isVideoMode = false;
+      }
+
+      function updateTabs() {
+        tabVideo.classList.toggle('tbtn-active', isVideoMode);
+        tabImages.classList.toggle('tbtn-active', !isVideoMode);
+      }
+
+      // Intercept tutorial button clicks
+      document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.tutorial-btn');
+        if (!btn) return;
+
+        // Get videos from button
+        const videosAttr = btn.getAttribute('data-videos') || '';
+        const imagesAttr = btn.getAttribute('data-images') || '';
+
+        currentVideos = videosAttr.split(',').map(s => s.trim()).filter(Boolean);
+        currentImages = imagesAttr.split(',').map(s => s.trim()).filter(Boolean);
+        videoIndex = 0;
+
+        // Show switch only if both exist
+        const hasVideos = currentVideos.length > 0;
+        const hasImages = currentImages.length > 0;
+
+        switchWrap.style.display = (hasVideos && hasImages) ? 'flex' : 'none';
+
+        // Default to video if available
+        isVideoMode = hasVideos;
+
+        // Small delay to let original script open modal
+        setTimeout(function () {
+          updateTabs();
+          if (isVideoMode) {
+            showVideo();
+          } else {
+            showImages();
+          }
+        }, 50);
+      }, true);
+
+      // Tab click handlers
+      tabVideo.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (!currentVideos.length) return;
+        isVideoMode = true;
+        updateTabs();
+        showVideo();
+      });
+
+      tabImages.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (!currentImages.length) return;
+        isVideoMode = false;
+        updateTabs();
+        showImages();
+      });
+
+      // Clean up on modal close
+      const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          if (mutation.attributeName === 'class') {
+            if (!modal.classList.contains('is-open')) {
+              iframe.src = '';
+              videoWrap.style.display = 'none';
+              imgWrap.style.display = 'flex';
+              switchWrap.style.display = 'none';
+            }
+          }
+        });
+      });
+      observer.observe(modal, { attributes: true });
+    })();
+  </script>
+
+ <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.video-switcher-container').forEach(container => {
+        const tabs = container.querySelectorAll('.video-tab');
+        const panels = container.querySelectorAll('.video-panel');
+        const indicator = container.querySelector('.tab-indicator');
+
+        if (tabs.length > 0 && indicator) {
+          const activeTab = container.querySelector('.video-tab.active');
+          if (activeTab) {
+            indicator.style.width = activeTab.offsetWidth + 'px';
+            indicator.style.transform = `translateX(${activeTab.offsetLeft - 3}px)`;
+          }
+
+          tabs.forEach((tab, index) => {
+            tab.addEventListener('click', function () {
+              tabs.forEach(t => t.classList.remove('active'));
+              panels.forEach(p => { p.classList.remove('active'); p.style.display = 'none'; });
+
+              tab.classList.add('active');
+              const panel = container.querySelector(`.video-panel[data-panel="${index}"]`);
+              if (panel) { panel.classList.add('active'); panel.style.display = 'block'; }
+
+              indicator.style.width = tab.offsetWidth + 'px';
+              indicator.style.transform = `translateX(${tab.offsetLeft - 3}px)`;
+            });
+          });
+        }
+      });
+    });
+  </script>
+ <!-- Gallery Modal System -->
+ <div id="galleryModal" class="gallery-modal">
+ <div class="gallery-modal-content">
+ <button class="modal-close" id="galleryClose">&times;</button>
+ <div class="modal-img-wrap">
+ <img id="modalImg" src="" alt="Selected Image">
+ </div>
+ <div class="modal-info-wrap">
+ <h3>Image Details</h3>
+ <p class="modal-prompt-text" id="modalPromptText"></p>
+ <div class="modal-actions">
+ <button class="btn-remix">
+ <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+ <path
+ d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+ </svg>
+ Remix
+ </button>
+ <button class="btn-copy-prompt" id="btnCopyPrompt">
+ <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+ <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+ <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+ </svg>
+ Copy Prompt
+ </button>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Image Gallery Modal System -->
+ <!-- 1. Explorer Grid Modal -->
+ <div id="explorerModal" class="beewant-modal">
+ <div class="modal-header">
+ <div class="view-control-left">
+ <span style="font-weight: 600; color: #fff;">Gallery Explorer</span>
+ </div>
+ <button class="modal-close" id="explorerClose">&times;</button>
+ </div>
+ <div class="explorer-content">
+ <div class="explorer-grid" id="explorerGrid">
+ <!-- Items injected by JS -->
+ </div>
+ </div>
+ </div>
+
+ <!-- 2. Detail View Modal -->
+ <div id="detailModal" class="beewant-modal">
+ <div class="modal-header">
+ <div class="view-control-left">
+ <button class="modal-grid-back" id="backToGrid">
+ <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+ <rect x="3" y="3" width="7" height="7"></rect>
+ <rect x="14" y="3" width="7" height="7"></rect>
+ <rect x="14" y="14" width="7" height="7"></rect>
+ <rect x="3" y="14" width="7" height="7"></rect>
+ </svg>
+ </button>
+ <span style="font-weight: 600; color: #fff;">Image Detail</span>
+ </div>
+ <button class="modal-close" id="detailClose">&times;</button>
+ </div>
+ <div class="detail-content">
+ <div class="detail-img-side">
+ <img id="detailImg" src="" alt="Detail View">
+ </div>
+ <div class="detail-info-side">
+ <div class="detail-label-group">
+ <span>Model: Nanobanana</span>
+ <span>Quality: High</span>
+ <span>Size: 1024x1024</span>
+ </div>
+ <div class="detail-prompt-box">
+ <p id="detailPrompt"></p>
+ </div>
+ <div class="detail-actions">
+ <button class="btn-remix">
+ <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+ <path
+ d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+ </svg>
+ Remix
+ </button>
+ <button class="btn-copy-prompt" id="btnCopyDetailPrompt">
+ <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+ <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+ <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+ </svg>
+ Copy Prompt
+ </button>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <script>
+    (function () {
+      const galleryData = [
+        {
+          src: "./gen_cyberpunk.png",
+          prompt: "Prompt: Cinematic shot of a futuristic neon city in the rain, ultra-detailed, 8k, cyberpunk aesthetic."
+        },
+        {
+          src: "./gen_phoenix.png",
+          prompt: "Prompt: A majestic phoenix rising from glowing embers, vibrant orange and gold feathers, fantasy digital art."
+        },
+        {
+          src: "./gen_island.png",
+          prompt: "Prompt: Aerial view of a heart-shaped tropical island in turquoise water, white sand beaches, paradise photography."
+        },
+        {
+          src: "./gen_kitten.png",
+          prompt: "Prompt: A cute robot kitten playing with a ball of fiber optic yarn, soft lighting, futuristic interior."
+        },
+        {
+          src: "./gen_airship.png",
+          prompt: "Prompt: Steampunk airship docking at a mountain peak station, brass and copper details, clouds in the background."
+        },
+        {
+          src: "./gen_astronaut.png",
+          prompt: "Prompt: Close-up of an astronaut's helmet reflecting a colorful galaxy, space exploration concept art."
+        },
+        {
+          src: "./GENERATED 1.png",
+          prompt: "Prompt: Vibrant chameleon on branch with textured green skin, tropical rainforest bokeh background, wildlife macro photography."
+        },
+        {
+          src: "./GENERATED 2.png",
+          prompt: "Prompt: Construction workers in yellow safety vests and hard hats standing before modern building under construction, industrial site photography."
+        },
+        {
+          src: "./generated 3.png",
+          prompt: "Prompt: Smartphone displaying app interface beside minimalist Scandinavian wooden table lamp, clean white surface, product photography."
+        },
+        {
+          src: "./generated 4.png",
+          prompt: "Prompt: Handcrafted ceramic coffee mug with intricate geometric patterns, warm studio lighting, artisan pottery aesthetic."
+        },
+        {
+          src: "./generated 5.png",
+          prompt: "Prompt: Sea turtle swimming through turquoise water above vibrant coral reef, underwater wildlife photography."
+        },
+        {
+          src: "./generated 6.png",
+          prompt: "Prompt: Man in flowing linen robe standing in desert sand dunes at golden hour, contemplative portrait photography."
+        },
+        {
+          src: "./generated 7.png",
+          prompt: "Prompt: Person standing on dramatic cliff edge overlooking stormy ocean waves, moody overcast sky, cinematic coastal landscape."
+        },
+        {
+          src: "./generated 8.png",
+          prompt: "Prompt: Friends enjoying coffee at cozy cafe with warm ambient lighting, candid lifestyle photography with soft bokeh background."
+        },
+        {
+          src: "./generated 9.png",
+          prompt: "Prompt: Minimalist white architectural scale model on clean white background, soft shadows, contemporary futuristic design concept."
+        },
+        {
+          src: "./generated 10.png",
+          prompt: "Prompt: Fantasy mystical tree with glowing bioluminescent lights against dramatic sunset sky, magical forest landscape painting style."
+        },
+        {
+          src: "./generated 11.png",
+          prompt: "Prompt: Scientists in white lab coats working with colorful chemical beakers in modern laboratory, educational science photography."
+        },
+        {
+          src: "./generated 12.png",
+          prompt: "Prompt: Minimalist line art sketches of dog poses and movements on white background, gesture drawing study, pencil wireframe style."
+        },
+        {
+          src: "./generated 16.png",
+          prompt: "Prompt: Bold geometric Bauhaus pattern with primary colors red blue yellow, circles triangles rectangles, modern abstract art composition."
+        },
+        {
+          src: "./generated 17.png",
+          prompt: "Prompt: Solar panels installed on residential rooftop at golden hour sunset, sustainable energy photography with warm ambient lighting."
+        }
+      ];
+
+      const explorerModal = document.getElementById('explorerModal');
+      const detailModal = document.getElementById('detailModal');
+      const explorerGrid = document.getElementById('explorerGrid');
+      const detailImg = document.getElementById('detailImg');
+      const detailPrompt = document.getElementById('detailPrompt');
+      const copyBtn = document.getElementById('btnCopyDetailPrompt');
+
+      // Populate Explorer Grid
+      galleryData.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'explorer-item';
+        div.innerHTML = `<img src="${item.src}" alt="Gallery ${index}">`;
+        div.onclick = () => showDetail(item);
+        explorerGrid.appendChild(div);
+      });
+
+      const showExplorer = () => {
+        explorerModal.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      };
+
+      const showDetail = (item) => {
+        detailImg.src = item.src;
+        detailPrompt.textContent = item.prompt;
+        detailModal.classList.add('is-open');
+        explorerModal.classList.remove('is-open');
+      };
+
+      const closeAll = () => {
+        explorerModal.classList.remove('is-open');
+        detailModal.classList.remove('is-open');
+        document.body.style.overflow = '';
+      };
+
+      document.getElementById('galleryTrigger').onclick = showExplorer;
+      document.getElementById('explorerClose').onclick = closeAll;
+      document.getElementById('detailClose').onclick = closeAll;
+      document.getElementById('backToGrid').onclick = () => {
+        detailModal.classList.remove('is-open');
+        explorerModal.classList.add('is-open');
+      };
+
+      copyBtn.onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(detailPrompt.textContent);
+          const originalText = copyBtn.innerHTML;
+          copyBtn.innerHTML = '<span>Copied!</span>';
+          setTimeout(() => copyBtn.innerHTML = originalText, 2000);
+        } catch (err) { console.error(err); }
+      };
+    })();
+  </script>
+
+ <script>
+    (function () {
+      const overlay = document.getElementById('commandOverlay');
+      const input = document.getElementById('commandInput');
+      const sidebarSearch = document.getElementById('search');
+      const resultsEl = document.getElementById('commandResults');
+      const metaEl = document.getElementById('commandMeta');
+      if (!overlay || !input || !resultsEl || !metaEl) return;
+
+      const docAPI = window.__beewantDocs || {};
+
+      const headingSelector = '.doc-page h2[id], .doc-page h3[id], .doc-page h4[id]';
+      const headings = Array.from(document.querySelectorAll(headingSelector));
+
+      const headerEl = document.querySelector('.app-header');
+
+      const entries = headings.map((el) => {
+        const id = el.id;
+        const title = (el.textContent || '').trim();
+        const page = el.closest('.doc-page');
+        const sectionTitle = page ? (page.querySelector('h2')?.textContent?.trim() || page.dataset.page || 'Documentation') : 'Documentation';
+        const pageId = page?.dataset.page || null;
+        const snippet = createSnippet(el);
+        return { id, title, sectionTitle, snippet, pageId };
+      }).filter(entry => entry.title);
+
+      let filtered = [];
+      let recent = [];
+      let activeIndex = -1;
+
+      function createSnippet(el) {
+        const container = el.closest('.section') || el.parentElement;
+        if (!container) return '';
+        const textSources = container.querySelectorAll('p, li, .tip, .note, .warning');
+        for (const node of textSources) {
+          const text = (node.textContent || '').replace(/\s+/g, ' ').trim();
+          if (text.length > 40) {
+            return text.length > 160 ? text.slice(0, 157) + '…' : text;
+          }
+        }
+        return '';
+      }
+
+      function openPalette(initialValue = '') {
+        overlay.classList.add('is-open');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        input.value = initialValue;
+        input.focus();
+        filterResults(initialValue);
+      }
+
+      function closePalette() {
+        overlay.classList.remove('is-open');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        activeIndex = -1;
+        resultsEl.innerHTML = '';
+      }
+
+      function renderEmpty(message) {
+        resultsEl.innerHTML = `<div class="command-empty">${message}</div>`;
+      }
+
+      function renderResults(list) {
+        resultsEl.innerHTML = '';
+        if (!list.length) {
+          renderEmpty('No matches found. Try a different keyword.');
+          return;
+        }
+
+        list.forEach((item, idx) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'command-result';
+          btn.dataset.index = String(idx);
+          btn.innerHTML = `
+            <span class="command-result-text">
+              <span class="command-title">${item.title}</span>
+              ${item.snippet ? `<span class="command-snippet">${item.snippet}</span>` : ''}
+            </span>
+            <span class="command-section">${item.sectionTitle}</span>`;
+          btn.addEventListener('click', () => selectResult(idx));
+          resultsEl.appendChild(btn);
+        });
+        setActiveIndex(list.length ? 0 : -1);
+      }
+
+      function setActiveIndex(index) {
+        activeIndex = index;
+        Array.from(resultsEl.querySelectorAll('.command-result')).forEach((btn, idx) => {
+          btn.classList.toggle('active', idx === activeIndex);
+        });
+      }
+
+      function addRecent(entry) {
+        recent = [entry, ...recent.filter(item => item.id !== entry.id)].slice(0, 5);
+      }
+
+      function scrollToElement(el) {
+        if (!el) return;
+        const headerOffset = (headerEl ? headerEl.offsetHeight : 0) + 20;
+        const top = el.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+      }
+
+      function selectResult(index) {
+        const item = filtered[index];
+        if (!item) return;
+        addRecent(item);
+        closePalette();
+        const targetPage = item.pageId || (typeof docAPI.findPageForAnchor === 'function' ? docAPI.findPageForAnchor(item.id) : null);
+
+        const performScroll = () => {
+          if (typeof docAPI.scrollToAnchor === 'function') {
+            docAPI.scrollToAnchor(item.id);
+          } else {
+            const fallback = document.getElementById(item.id);
+            if (fallback) scrollToElement(fallback);
+          }
+          window.location.hash = item.id;
+        };
+
+        if (targetPage && typeof docAPI.setActivePage === 'function') {
+          docAPI.setActivePage(targetPage);
+          requestAnimationFrame(performScroll);
+        } else {
+          performScroll();
+        }
+      }
+
+      function filterResults(query) {
+        const value = (query || '').trim().toLowerCase();
+        if (!value) {
+          metaEl.textContent = recent.length ? 'Recent' : 'Suggestions';
+          filtered = recent.length ? recent.slice() : entries.slice(0, 8);
+          renderResults(filtered);
+          return;
+        }
+
+        filtered = entries.filter(entry => {
+          const haystack = `${entry.title} ${entry.sectionTitle} ${entry.snippet}`.toLowerCase();
+          return haystack.includes(value);
+        });
+        metaEl.textContent = 'Results';
+        renderResults(filtered);
+      }
+
+      function attachTrigger(el) {
+        if (!el) return;
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          openPalette();
+        });
+        el.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openPalette();
+          }
+        });
+      }
+
+      attachTrigger(sidebarSearch);
+
+      input.addEventListener('input', (e) => {
+        filterResults(e.target.value);
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (filtered.length) {
+            const next = activeIndex + 1 >= filtered.length ? 0 : activeIndex + 1;
+            setActiveIndex(next);
+          }
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (filtered.length) {
+            const prev = activeIndex - 1 < 0 ? filtered.length - 1 : activeIndex - 1;
+            setActiveIndex(prev);
+          }
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          selectResult(activeIndex);
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          closePalette();
+        }
+      });
+
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closePalette();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        const isMac = navigator.platform.toUpperCase().includes('MAC');
+        const cmdKey = isMac ? e.metaKey : e.ctrlKey;
+        if (cmdKey && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          if (overlay.classList.contains('is-open')) closePalette();
+          else openPalette();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('is-open')) {
+          closePalette();
+        }
+      });
+    })();
+  </script>
+
+
+ <script>
+    (function () {
+      const docSwitcher = document.getElementById('docSwitcher');
+      if (docSwitcher) {
+        const toggle = docSwitcher.querySelector('.doc-dropdown-toggle');
+        toggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          docSwitcher.classList.toggle('is-open');
+        });
+        document.addEventListener('click', () => {
+          docSwitcher.classList.remove('is-open');
+        });
+      }
+    })();
+  </script>
+</body>
+
+</html>
