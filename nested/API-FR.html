@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation API Beewant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: #2c3e50;
+            color: white;
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #34495e;
+            border-radius: 3px;
+        }
+        
+        .sidebar h1 {
+            padding: 0 1.5rem 1rem;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #34495e;
+            margin-bottom: 1.5rem;
+        }
+        
+        .sidebar nav ul {
+            list-style: none;
+        }
+        
+        .sidebar nav ul li {
+            margin: 0.5rem 0;
+        }
+        
+        .sidebar nav ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 0.5rem 1.5rem;
+            display: block;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar nav ul li a:hover {
+            background: #34495e;
+            border-left-color: #3498db;
+        }
+        
+        .sidebar nav ul li.active a {
+            background: #34495e;
+            border-left-color: #3498db;
+            font-weight: 600;
+        }
+        
+        .sidebar nav ul ul {
+            padding-left: 1rem;
+        }
+        
+        .sidebar nav ul ul li a {
+            font-size: 0.9rem;
+            padding: 0.4rem 1.5rem;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 3rem;
+            max-width: 1200px;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 8px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        h3 {
+            color: #34495e;
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+        }
+        
+        h4 {
+            color: #34495e;
+            font-size: 1.2rem;
+            margin: 1.5rem 0 1rem;
+        }
+        
+        h5 {
+            color: #7f8c8d;
+            font-size: 1rem;
+            margin: 1rem 0 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+            color: #555;
+        }
+        
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e74c3c;
+        }
+        
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        
+        .method-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+        
+        .method-get { background: #27ae60; color: white; }
+        .method-post { background: #3498db; color: white; }
+        .method-put { background: #f39c12; color: white; }
+        .method-patch { background: #e67e22; color: white; }
+        .method-delete { background: #e74c3c; color: white; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+        }
+        
+        table thead {
+            background: #34495e;
+            color: white;
+        }
+        
+        table th,
+        table td {
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        
+        table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+        
+        ul li, ol li {
+            margin: 0.5rem 0;
+            color: #555;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            border-color: #0c5460;
+            color: #0c5460;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            border-color: #856404;
+            color: #856404;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h1>Documentation API</h1>
+            <nav>
+                <ul>
+                    <li class="active"><a href="#apercu">Aperçu</a></li>
+                    <li><a href="#indexes">Index</a>
+                        <ul>
+                            <li><a href="#create-index">Créer un index</a></li>
+                            <li><a href="#list-indexes">Lister les index</a></li>
+                            <li><a href="#retrieve-index">Récupérer un index</a></li>
+                            <li><a href="#update-index">Mettre à jour un index</a></li>
+                            <li><a href="#delete-index">Supprimer un index</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#collections">Collections</a>
+                        <ul>
+                            <li><a href="#create-collection">Créer une collection</a></li>
+                            <li><a href="#list-collections">Lister les collections</a></li>
+                            <li><a href="#retrieve-collection">Récupérer une collection</a></li>
+                            <li><a href="#update-collection">Mettre à jour une collection</a></li>
+                            <li><a href="#delete-collection">Supprimer une collection</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#chat">Discussion</a>
+                        <ul>
+                            <li><a href="#transcription">Transcription</a></li>
+                            <li><a href="#chat-text">Discussion avec Texte</a></li>
+                            <li><a href="#chat-web">Discussion avec Web</a></li>
+                            <li><a href="#chat-tools">Discussion avec Outils</a></li>
+                            <li><a href="#chat-image">Discussion avec Image</a></li>
+                            <li><a href="#chat-indexed">Discussion avec Index</a></li>
+                            <li><a href="#chat-collection">Discussion avec Collection</a></li>
+                            <li><a href="#list-chats">Lister les discussions</a></li>
+                            <li><a href="#continue-chat">Continuer la discussion</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#sources">Sources</a></li>
+                    <li><a href="#agents">Agents</a>
+                        <ul>
+                            <li><a href="#create-agent">Créer un agent</a></li>
+                            <li><a href="#list-agents">Lister les agents</a></li>
+                            <li><a href="#retrieve-agent">Récupérer un agent</a></li>
+                            <li><a href="#update-agent">Mettre à jour un agent</a></li>
+                            <li><a href="#delete-agent">Supprimer un agent</a></li>
+        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <section id="apercu" class="content-section">
+                <h2>Aperçu</h2>
+                <p>Prêt à plonger dans l'API Beewant ? Avec notre plateforme polyvalente, vous pouvez facilement extraire des informations à partir de vidéos, fichiers audio et documents, transformant vos données en informations exploitables. Basée sur les principes REST, notre API renvoie des réponses au format JSON, la rendant accessible dans divers langages de programmation et outils comme Postman ou tout client REST.</p>
+                
+                <h3>Décomposition</h3>
+                <ul>
+                    <li><strong>Prise en charge des méthodes :</strong> Nous proposons plusieurs méthodes pour interagir avec l'API :
+                        <ul>
+                            <li><strong>GET :</strong> Récupérer des données</li>
+                            <li><strong>POST :</strong> Créer quelque chose de nouveau ou déclencher une action</li>
+                            <li><strong>PATCH :</strong> Mettre à jour des informations existantes</li>
+                            <li><strong>DELETE :</strong> Supprimer quelque chose</li>
+                        </ul>
+                    </li>
+                    <li><strong>URL de base :</strong> Notre API est accessible à <code>https://beewant.com/api</code></li>
+                    <li><strong>Paramètres :</strong> Spécifiez ce avec quoi vous voulez interagir (vidéos, audio ou documents) en utilisant :
+                        <ul>
+                            <li><strong>Paramètres de chemin :</strong> Pointer vers un objet spécifique</li>
+                            <li><strong>Paramètres de requête :</strong> Options supplémentaires pour filtrer ou trier vos réponses</li>
+                        </ul>
+                    </li>
+                    <li><strong>Authentification :</strong> N'oubliez pas d'inclure votre clé API dans les en-têtes pour authentifier vos requêtes</li>
+                </ul>
+                
+                <h3>Réponses et gestion des erreurs</h3>
+                <p>Notre API suit la norme RFC 9110, vous saurez donc toujours si votre requête a réussi ou non. Voici une répartition des codes d'état HTTP courants :</p>
+                <ul>
+                    <li><strong>200 :</strong> Requête réussie</li>
+                    <li><strong>201 :</strong> Nouvelle ressource créée</li>
+                    <li><strong>400 :</strong> Mauvaise requête. Vérifiez vos champs code et message pour plus de détails</li>
+                    <li><strong>401 :</strong> Non autorisé. Clé API invalide</li>
+                    <li><strong>404 :</strong> Ressource non trouvée</li>
+                    <li><strong>429 :</strong> Limite de débit dépassée</li>
+                </ul>
+                <p>Si vous rencontrez une erreur 4xx, la réponse inclura un code et un message convivial expliquant le problème, qui peut être affiché dans votre application.</p>
+                
+                <h3>Exemples de flux de travail</h3>
+                <p>Cette section fournit un aperçu des flux de travail courants pour utiliser la plateforme Beewant Multimodal AI. Chaque flux de travail comprend une série d'étapes, et vous pouvez vous référer à la documentation détaillée pour plus d'informations sur chacune.</p>
+                <p>Lors du téléchargement de contenu (vidéos, audio ou documents) sur la plateforme, un traitement asynchrone est requis. Veuillez attendre que le traitement du contenu soit terminé avant de passer aux étapes suivantes.</p>
+                
+                <h3>Prérequis</h3>
+                <ol>
+                    <li>Si vous avez déjà un compte, allez sur la page Clé API dans vos Comptes et Paramètres Beewant et cliquez sur l'icône Copier à côté de votre clé</li>
+                    <li>Si vous n'avez pas de compte, inscrivez-vous pour un compte Beewant, puis suivez les étapes ci-dessus pour récupérer votre clé API</li>
+                </ol>
+                
+                <h3>Types de contenu pris en charge</h3>
+                <ul>
+                    <li><strong>Vidéos :</strong> Format MP4</li>
+                    <li><strong>Audio :</strong> Format MP3</li>
+                    <li><strong>Documents :</strong> Fichiers texte tels que PDF, TXT, JSON et DOC</li>
+                </ul>
+                
+                <h3>Pour commencer</h3>
+                <ol>
+                    <li>Sélectionnez le(s) type(s) de contenu que vous souhaitez analyser</li>
+                    <li>Téléchargez votre contenu en utilisant les points de terminaison API appropriés</li>
+                    <li>Attendez que le traitement soit terminé. Un bouton Discussion apparaîtra lorsque c'est fait</li>
+                    <li>Utilisez le Playground de Discussion pour extraire des informations de votre contenu traité</li>
+                </ol>
+            </section>
+
+            <section id="indexes" class="content-section">
+                <h2>Index</h2>
+                <p>Les index dans Beewant permettent aux utilisateurs d'organiser et de récupérer différents types de médias comme les documents, les audios, les vidéos et les liens YouTube, rationalisant l'accès et l'interaction avec le contenu. Avec les index, les utilisateurs peuvent gérer et interagir efficacement avec des médias spécifiques dans un environnement conversationnel unifié.</p>
+                
+                <div id="create-index">
+                    <h3>Créer un index</h3>
+                    <p>Le composant de discussion Beewant permet une communication transparente avec les images, vidéos, documents et fichiers audio. Il dispose d'une interface intuitive, d'un traitement en temps réel et s'intègre en douceur avec d'autres modules pour des flux de travail efficaces.</p>
+                    
+                    <h4>Index pour n'importe quel type</h4>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-post">POST</span>
+                        <code>api/index</code>
+                    </p>
+                    
+                    <h5>Paramètres de requête</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Paramètre</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>mediaFile</code></td>
+                                <td>File</td>
+                                <td>Le fichier à indexer. Remplacez <code>file_path</code> par le chemin complet vers votre fichier</td>
+                            </tr>
+                            <tr>
+                                <td><code>mediaType</code></td>
+                                <td>String</td>
+                                <td>Le type de média. Peut être <code>document</code>, <code>video</code> ou <code>audio</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>advanced</code></td>
+                                <td>Boolean</td>
+                                <td>Définir sur <code>true</code> pour activer l'indexation avancée, qui effectue une analyse de contenu approfondie du fichier téléchargé (texte, images, graphiques, etc.), rendant les éléments consultables et interactifs. Pour une indexation texte uniquement plus rapide, définissez ce paramètre sur <code>false</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h5>Exemple de requête</h5>
+                    <pre><code>import requests, mimetypes
+
+# Remplacez par votre token API
+url = "https://beewant.com/api/index"
+
+# En-têtes avec token
+headers = {
+    "Authorization": "Token &lt;VOTRE_TOKEN&gt;"
+}
+
+# Paramètres de charge utile
+payload = {
+    "mediaType": "document",
+    "advanced": False,
+}
+
+# Fichier à télécharger
+file_path = "/chemin/vers/votre/exemple.pdf"
+files = [
+    (
+        "mediaFile",
+        (
+            "exemple.pdf",
+            open(file_path, "rb"),
+            mimetypes.guess_type(file_path)[0] or "application/octet-stream",
+        ),
+    )
+]
+
+response = requests.post(url, headers=headers, data=payload, files=files)
+print(response.text)</code></pre>
+                    
+                    <h5>Schéma de réponse</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Paramètre</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>id</code></td>
+                                <td>Integer</td>
+                                <td>Identifiant unique du fichier téléchargé</td>
+                            </tr>
+                            <tr>
+                                <td><code>file_link</code></td>
+                                <td>String</td>
+                                <td>Le lien URL pour accéder au fichier téléchargé</td>
+                            </tr>
+                            <tr>
+                                <td><code>title</code></td>
+                                <td>String</td>
+                                <td>Nom du média</td>
+                            </tr>
+                            <tr>
+                                <td><code>user</code></td>
+                                <td>Integer</td>
+                                <td>ID utilisateur de la personne qui a téléchargé le fichier</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>Créer un index | URL vidéo</h4>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-post">POST</span>
+                        <code>api/index-video</code>
+                    </p>
+                    
+                    <h5>Corps de la requête</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Paramètre</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>videoLink</code></td>
+                                <td>String</td>
+                                <td>Le lien URL vers la vidéo YouTube. Remplacez selon les besoins</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h5>Exemple de requête</h5>
+                    <pre><code>import requests
+import json
+
+url = "https://beewant.com/api/index-video"
+
+# Remplacez le lien Youtube par n'importe quel lien souhaité
+video_link = "https://www.youtube.com/watch?v=fPL4kUuanrg"
+
+# Changez pour votre Token
+headers = {
+    "Authorization": f"Token &lt;VOTRE_TOKEN&gt;",
+    "Content-Type": "application/json",
+}
+
+data = {
+    "videoLink": video_link,
+}
+
+response = requests.post(url, headers=headers, json=data)
+response.json()</code></pre>
+                </div>
+                
+                <div id="list-indexes">
+                    <h3>Lister les index</h3>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-get">GET</span>
+                        <code>/api/indexes/</code>
+                    </p>
+                    
+                    <h5>Exemple de requête</h5>
+                    <pre><code>import requests
+
+url = "https://beewant.com/api/indexes/"
+
+# Remplacez par votre token API
+headers = {
+    "Authorization": f"Token &lt;VOTRE_TOKEN&gt;"
+}
+
+response = requests.get(url, headers=headers)
+print(response.text)</code></pre>
+                    
+                    <h5>Schéma de réponse</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Paramètre</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>index_id</code></td>
+                                <td>L'identifiant unique pour chaque index</td>
+                            </tr>
+                            <tr>
+                                <td><code>title</code></td>
+                                <td>Le titre de l'index</td>
+                            </tr>
+                            <tr>
+                                <td><code>link</code></td>
+                                <td>Lien URL vers le contenu multimédia</td>
+                            </tr>
+                            <tr>
+                                <td><code>hash</code></td>
+                                <td>Hash du fichier multimédia</td>
+                            </tr>
+                            <tr>
+                                <td><code>media type</code></td>
+                                <td>Le type de média (par exemple, vidéo)</td>
+                            </tr>
+                            <tr>
+                                <td><code>speakers</code></td>
+                                <td>Informations sur les intervenants, le cas échéant</td>
+                            </tr>
+                            <tr>
+                                <td><code>metadata</code></td>
+                                <td>Métadonnées supplémentaires liées à l'index</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="retrieve-index">
+                    <h3>Récupérer un index</h3>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-get">GET</span>
+                        <code>api/&lt;INDEX_ID&gt;/indexes/</code>
+                    </p>
+                    
+                    <h5>Paramètres de requête</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Paramètre</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>type</code></td>
+                                <td>String</td>
+                                <td>Le type de média à filtrer. Doit être 'document', 'audio' ou 'video'</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="update-index">
+                    <h3>Mettre à jour un index</h3>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-put">PUT</span>
+                        <code>api/&lt;INDEX_ID&gt;/indexes/</code>
+                    </p>
+                </div>
+                
+                <div id="delete-index">
+                    <h3>Supprimer un index</h3>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-delete">DELETE</span>
+                        <code>api/&lt;INDEX_ID&gt;/indexes/</code>
+                    </p>
+                </div>
+            </section>
+            
+            <section id="collections" class="content-section">
+                <h2>Collections</h2>
+                <p>Les collections dans Beewant permettent aux utilisateurs de regrouper plusieurs médias indexés, comme des documents, des audios et des vidéos, dans des ensembles cohérents pour un accès et une interaction faciles. Cette fonctionnalité simplifie l'organisation du contenu, permettant aux utilisateurs de gérer, mettre à jour ou récupérer des médias connexes ensemble, améliorant les flux de travail collaboratifs et rationalisés.</p>
+                
+                <div id="create-collection">
+                    <h3>Créer une collection</h3>
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-post">POST</span>
+                        <code>api/collection/create</code>
+                    </p>
+                    
+                    <h5>Paramètres de requête</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Paramètre</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>name</code></td>
+                                <td>String</td>
+                                <td>Le nom de la collection</td>
+                            </tr>
+                            <tr>
+                                <td><code>documents</code></td>
+                                <td>List</td>
+                                <td>Une liste des ID de documents à inclure dans la collection</td>
+                            </tr>
+                            <tr>
+                                <td><code>audios</code></td>
+                                <td>List</td>
+                                <td>Une liste des ID audio à inclure dans la collection</td>
+                            </tr>
+                            <tr>
+                                <td><code>videos</code></td>
+                                <td>List</td>
+                                <td>Une liste des ID vidéo à inclure dans la collection</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h5>Exemple de requête</h5>
+                    <pre><code>import requests
+import json
+
+url = "https://beewant.com/api/collection/create"
+
+payload = json.dumps({
+    "name": "&lt;NOM_COLLECTION&gt;",
+    "documents": [
+        &lt;DOCUMENT_ID_1&gt;,
+        &lt;DOCUMENT_ID_2&gt;
+    ],
+    "audios": [
+        &lt;AUDIO_ID_1&gt;
+    ],
+    "videos": [
+        &lt;VIDEO_ID_1&gt;
+    ]
+})
+
+headers = {
+    'Authorization': f'Token &lt;VOTRE_TOKEN&gt;',
+    'Content-Type': 'application/json'
+}
+
+response = requests.post(url, headers=headers, data=payload)
+print(response.text)</code></pre>
+                </div>
+                
+                <div id="list-collections">
+                    <h3>Lister les collections</h3>
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-get">GET</span>
+                        <code>api/collections</code>
+                    </p>
+                </div>
+                
+                <div id="retrieve-collection">
+                    <h3>Récupérer une collection</h3>
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-get">GET</span>
+                        <code>/api/&lt;COLLECTION_ID&gt;/collections</code>
+                    </p>
+                </div>
+                
+                <div id="update-collection">
+                    <h3>Mettre à jour une collection</h3>
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-patch">PATCH</span>
+                        <code>/api/&lt;COLLECTION_ID&gt;/collections</code>
+                    </p>
+                </div>
+                
+                <div id="delete-collection">
+                    <h3>Supprimer une collection</h3>
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-delete">DELETE</span>
+                        <code>/api/&lt;COLLECTION_ID&gt;/collections</code>
+                    </p>
+                </div>
+            </section>
+
+            <section id="chat" class="content-section">
+                <h2>Discussion</h2>
+                <p>Beewant offre une expérience de discussion interactive et polyvalente, vous permettant d'interagir avec divers types de médias de manière transparente. Que vous discutiez de texte brut, analysiez des images, interagissiez avec des documents indexés ou exploriez des collections de médias, notre plateforme de discussion est conçue pour s'adapter à vos besoins et fournir des informations précieuses dans tous les formats.</p>
+                
+                <div id="transcription">
+                    <h3>Transcription</h3>
+                    <p>L'Agent de Transcription dans Beewant convertit le contenu vidéo ou audio en texte précis et accessible. Cette fonctionnalité est idéale pour générer des transcriptions pour la documentation, l'accessibilité ou la réutilisation du contenu dans des formats texte, garantissant une utilisabilité transparente dans divers scénarios.</p>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-post">POST</span>
+                        <code>api/transcription</code>
+                    </p>
+                    
+                    <h5>Paramètres de requête</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Paramètre</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>mediaKey</code></td>
+                                <td>String</td>
+                                <td>Le hash unique représentant le fichier multimédia (par exemple, vidéo ou audio) pour récupérer la transcription</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h5>Exemple de requête</h5>
+                    <pre><code>import requests
+import json
+
+url = "https://beewant.com/api/transcription"
+
+payload = json.dumps({
+    "mediaKey": "&lt;MEDIA_HASH&gt;"
+})
+
+headers = {
+    'Authorization': f'Token &lt;VOTRE_TOKEN&gt;',
+    'Content-Type': 'application/json'
+}
+
+response = requests.post(url, headers=headers, data=payload)
+print(response.text)</code></pre>
+                </div>
+                
+                <div id="chat-text">
+                    <h3>Discussion avec Texte</h3>
+                    <p>La fonctionnalité Discussion avec Texte dans Beewant permet aux utilisateurs de s'engager dans des conversations dynamiques et perspicaces en utilisant du texte brut.</p>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-post">POST</span>
+                        <code>api/new-chat</code>
+                    </p>
+                    
+                    <h5>Paramètres de requête</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Paramètre</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>prompt</code></td>
+                                <td>String</td>
+                                <td>Le prompt textuel pour la discussion</td>
+                            </tr>
+                            <tr>
+                                <td><code>chat_model</code></td>
+                                <td>String</td>
+                                <td>Le modèle à utiliser. Modèles disponibles : qwen3-A22B-2507, deepseek-v3-0324, Kimi-K2-Instruct, deepseek-r1-0528, gpt-5.2-2025-12-11, claude4.5, gemini-3-pro-preview, mistral-large-2512</td>
+                            </tr>
+                            <tr>
+                                <td><code>agent_id</code></td>
+                                <td>Integer</td>
+                                <td>L'ID de l'agent à utiliser pour la discussion. Optionnel ; si non fourni, l'agent par défaut sera utilisé</td>
+                            </tr>
+                            <tr>
+                                <td><code>stream</code></td>
+                                <td>Boolean</td>
+                                <td>Définir sur True pour activer le streaming en temps réel, ou False pour désactiver le streaming</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="chat-web">
+                    <h3>Discussion avec Web</h3>
+                    <p>La fonctionnalité Discussion avec Web dans Beewant améliore les interactions en intégrant le contenu web dans les conversations.</p>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-post">POST</span>
+                        <code>api/new-chat</code>
+                    </p>
+                    
+                    <h5>Paramètres supplémentaires</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Paramètre</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>web</code></td>
+                                <td>Boolean</td>
+                                <td>Définir sur true pour activer la discussion avec le web</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="chat-tools">
+                    <h3>Discussion avec Outils</h3>
+                    <p>La fonctionnalité Discussion avec outils dans Beewant permet aux utilisateurs d'interagir avec le système MCP (Model Context Protocol) pour une analyse et une discussion avancées.</p>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-post">POST</span>
+                        <code>api/new-chat</code>
+                    </p>
+                    
+                    <h5>Paramètres supplémentaires</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Paramètre</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>mcp</code></td>
+                                <td>Boolean</td>
+                                <td>Définir sur true pour activer la discussion avec les outils (Model Context Protocol)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="alert alert-info">
+                        <strong>Modèles MCP disponibles :</strong> GLM-4.5, kimi-2, claude4.5, GPT5.2, gemini3
+                    </div>
+                </div>
+                
+                <div id="chat-image">
+                    <h3>Discussion avec Image</h3>
+                    <p>La fonctionnalité Discussion avec Image dans Beewant permet aux utilisateurs de télécharger et d'analyser des images directement dans la plateforme de discussion.</p>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-post">POST</span>
+                        <code>api/new-chat</code>
+                    </p>
+                    
+                    <h5>Paramètres supplémentaires</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Paramètre</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>image</code></td>
+                                <td>Base64 String</td>
+                                <td>Les données de l'image au format Base64</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="alert alert-info">
+                        <strong>Modèles d'image disponibles :</strong> qwen2.5omni, gpt-5.2-2025-12-11, claude-sonnet-4-5-20250929
+                    </div>
+                </div>
+                
+                <div id="chat-indexed">
+                    <h3>Discussion avec n'importe quel type indexé</h3>
+                    <p>La fonctionnalité Discussion avec n'importe quel index dans Beewant permet aux utilisateurs d'interagir dynamiquement avec le contenu indexé, y compris les documents, les audios, les vidéos et les collections.</p>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-post">POST</span>
+                        <code>/api/new-chat</code>
+                    </p>
+                    
+                    <h5>Paramètres de requête</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Paramètre</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>media_type</code></td>
+                                <td>String</td>
+                                <td>Le type de média avec lequel discuter. Peut être 'document', 'video', 'audio' ou 'collection'</td>
+                            </tr>
+                            <tr>
+                                <td><code>mediaID</code></td>
+                                <td>Integer</td>
+                                <td>L'ID du média avec lequel discuter</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="chat-collection">
+                    <h3>Discussion avec Collection</h3>
+                    <p>La fonctionnalité Discussion avec Collection dans Beewant permet aux utilisateurs d'interagir avec des collections de médias groupées.</p>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-post">POST</span>
+                        <code>/api/new-chat</code>
+                    </p>
+                </div>
+                
+                <div id="list-chats">
+                    <h3>Lister les discussions</h3>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-get">GET</span>
+                        <code>/api/chat-history</code>
+                    </p>
+                    
+                    <h5>Exemple de requête</h5>
+                    <pre><code>import requests
+
+url = "https://beewant.com/api/chat-history"
+
+headers = {
+    'Authorization': f'Token &lt;VOTRE_TOKEN&gt;',
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())</code></pre>
+                </div>
+                
+                <div id="continue-chat">
+                    <h3>Continuer la discussion</h3>
+                    <p>La fonctionnalité Continuer la Discussion dans Beewant permet aux utilisateurs de reprendre là où ils se sont arrêtés dans une session de discussion existante.</p>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-post">POST</span>
+                        <code>/api/&lt;CHAT_HISTORY_ID&gt;/chat-history/</code>
+                    </p>
+                </div>
+            </section>
+
+            <section id="sources" class="content-section">
+                <h2>Sources</h2>
+                <p>L'Agent Sources dans Beewant extrait des segments ciblés et significatifs des collections, des chronologies et des morceaux de documents. Que vous commenciez de zéro ou continuiez une session, cette fonctionnalité simplifie l'analyse et la récupération de contenu.</p>
+                
+                <h5>Méthode API</h5>
+                <p>
+                    <span class="method-badge method-post">POST</span>
+                    <code>api/media_sources</code>
+                </p>
+                
+                <h5>Paramètres de requête</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Paramètre</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>prompt</code></td>
+                            <td>String</td>
+                            <td>La demande ou requête spécifique que vous souhaitez faire</td>
+                        </tr>
+                        <tr>
+                            <td><code>mediaType</code></td>
+                            <td>String</td>
+                            <td>Le type de média interrogé. Peut être "collection", "video", "audio" ou "document"</td>
+                        </tr>
+                        <tr>
+                            <td><code>mediaID</code></td>
+                            <td>Integer</td>
+                            <td>L'ID unique du fichier multimédia</td>
+                        </tr>
+                        <tr>
+                            <td><code>chatModel</code></td>
+                            <td>String</td>
+                            <td>Le modèle de discussion à utiliser</td>
+                        </tr>
+                        <tr>
+                            <td><code>currentChat</code></td>
+                            <td>Integer</td>
+                            <td>L'ID de la session de discussion en cours (pour continuer une discussion existante)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="agents" class="content-section">
+                <h2>Agents</h2>
+                <p>La fonctionnalité de Création d'Agent dans Beewant vous permet de définir des Agents personnalisés avec des capacités spécifiques. Cela permet une automatisation sur mesure pour le traitement, l'analyse et les flux de travail de transformation de contenu sur vos ressources médiatiques.</p>
+                
+                <div id="create-agent">
+                    <h3>Créer un agent</h3>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-post">POST</span>
+                        <code>api/agents</code>
+                    </p>
+                    
+                    <h5>Paramètres de requête</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Paramètre</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>name</code></td>
+                                <td>String</td>
+                                <td>Nom/identifiant unique pour votre agent personnalisé</td>
+                            </tr>
+                            <tr>
+                                <td><code>description</code></td>
+                                <td>String</td>
+                                <td>Description optionnelle de l'objectif et des capacités de l'agent</td>
+                            </tr>
+                            <tr>
+                                <td><code>instructions</code></td>
+                                <td>String</td>
+                                <td>Instructions de traitement pour l'agent à exécuter</td>
+                            </tr>
+                            <tr>
+                                <td><code>icon</code></td>
+                                <td>File</td>
+                                <td>Fichier d'icône optionnel (par exemple, PNG/SVG)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h5>Exemple de requête</h5>
+                    <pre><code>import requests
+import json
+
+url = "https://beewant.com/api/agents"
+
+payload = {
+    "name": "nom_agent",
+    "description": "Description de l'agent",
+    "instructions": "Instructions de l'agent"
+}
+
+files = [
+    ('icon', ('icon.png', open('votre/chemin/icon', 'rb'), 'image/png'))
+]
+
+headers = {
+    'Authorization': f'Token &lt;VOTRE_TOKEN&gt;'
+}
+
+response = requests.post(url, headers=headers, data=payload, files=files)
+print(response.text)</code></pre>
+                </div>
+                
+                <div id="list-agents">
+                    <h3>Lister les agents</h3>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-get">GET</span>
+                        <code>/api/agents</code>
+                    </p>
+                    
+                    <h5>Exemple de requête</h5>
+                    <pre><code>import requests
+
+url = "https://beewant.com/api/agents"
+
+headers = {
+    'Authorization': f'Token &lt;VOTRE_TOKEN&gt;',
+    'Content-Type': 'application/json'
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())</code></pre>
+                </div>
+                
+                <div id="retrieve-agent">
+                    <h3>Récupérer un agent</h3>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-get">GET</span>
+                        <code>/api/agents/&lt;AGENT_ID&gt;</code>
+                    </p>
+                </div>
+                
+                <div id="update-agent">
+                    <h3>Mettre à jour un agent</h3>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-patch">PATCH</span>
+                        <code>/api/agents/&lt;AGENT_ID&gt;</code>
+                    </p>
+                    
+                    <h5>Exemple de requête</h5>
+                    <pre><code>import requests
+
+agent_id = "&lt;AGENT_ID&gt;"
+
+url = f"https://beewant.com/api/agents/{agent_id}"
+
+headers = {
+    'Authorization': f'Token &lt;VOTRE_TOKEN&gt;',
+    'Content-Type': 'application/json'
+}
+
+data = {
+    "name": "Nom d'agent mis à jour",
+    "description": "Description mise à jour pour l'agent",
+    "instructions": "Instructions mises à jour pour l'agent"
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())</code></pre>
+                </div>
+                
+                <div id="delete-agent">
+                    <h3>Supprimer un agent</h3>
+                    
+                    <h5>Méthode API</h5>
+                    <p>
+                        <span class="method-badge method-delete">DELETE</span>
+                        <code>/api/agents/&lt;AGENT_ID&gt;</code>
+                    </p>
+                    
+                    <h5>Exemple de requête</h5>
+                    <pre><code>import requests
+
+agent_id = "&lt;AGENT_ID&gt;"
+
+url = f"https://beewant.com/api/agents/{agent_id}"
+
+headers = {
+    'Authorization': f'Token &lt;VOTRE_TOKEN&gt;',
+    'Content-Type': 'application/json'
+}
+
+response = requests.delete(url, headers=headers)
+print(response.json())</code></pre>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
